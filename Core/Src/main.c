@@ -47,6 +47,7 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void LED_GPIO_Init(void);
+void LED_TogglePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -93,8 +94,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_5);
-    HAL_Delay(500);
+    LED_TogglePin(GPIOB, GPIO_PIN_5);
+    LED_TogglePin(GPIOE, GPIO_PIN_5);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -152,9 +153,11 @@ static void LED_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOE_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOE, GPIO_PIN_5, GPIO_PIN_SET);
 
   /*Configure GPIO pin : GPIO_PIN_5 */
   GPIO_InitStruct.Pin = GPIO_PIN_5;
@@ -162,6 +165,7 @@ static void LED_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
@@ -169,7 +173,10 @@ static void LED_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void LED_TogglePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin) {
+  HAL_GPIO_TogglePin(GPIOx, GPIO_Pin);
+  HAL_Delay(500);
+}
 /* USER CODE END 4 */
 
 /**
