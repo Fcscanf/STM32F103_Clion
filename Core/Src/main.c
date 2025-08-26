@@ -96,6 +96,7 @@ int main(void)
   {
     LED_TogglePin(GPIOB, GPIO_PIN_5);
     LED_TogglePin(GPIOE, GPIO_PIN_5);
+    HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -157,7 +158,7 @@ static void LED_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(GPIOE, GPIO_PIN_5, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOE, GPIO_PIN_5, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : GPIO_PIN_5 */
   GPIO_InitStruct.Pin = GPIO_PIN_5;
@@ -175,7 +176,6 @@ static void LED_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void LED_TogglePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin) {
   HAL_GPIO_TogglePin(GPIOx, GPIO_Pin);
-  HAL_Delay(500);
 }
 /* USER CODE END 4 */
 
