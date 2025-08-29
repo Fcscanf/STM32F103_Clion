@@ -1,5 +1,5 @@
 //
-// Created by fcant on 2025/8/27 ĞÇÆÚÈı.
+// Created by fcant on 2025/8/27 æ˜ŸæœŸä¸‰.
 //
 #include "key.h"
 
@@ -14,15 +14,15 @@ void KEY_INIT(void){
 
 uint8_t KEY_SCAN(void) {
     if (HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_4) == GPIO_PIN_RESET) {
-        // Ïû¶¶
+        // æ¶ˆæŠ–
         HAL_Delay(10);
         if (HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_4) == GPIO_PIN_RESET) {
-            // µÈ´ı°´¼üËÉ¿ª
+            // ç­‰å¾…æŒ‰é”®æ¾å¼€
             while (HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_4) == GPIO_PIN_RESET)
-            // °´¼ü°´ÏÂÁË
+            // æŒ‰é”®æŒ‰ä¸‹äº†
             return 0;
         }
     }
-    // °´¼üÎ´°´ÏÂ
+    // æŒ‰é”®æœªæŒ‰ä¸‹
     return 1;
 }

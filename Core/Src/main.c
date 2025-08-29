@@ -94,9 +94,11 @@ int main(void)
   while (1)
   {
     if (KEY_SCAN()) {
-      LED_TogglePin(GPIOB, GPIO_PIN_5);
+      // HAL_Delay(10);
+      // 按键未按下不做任何操作
     } else {
-      HAL_Delay(10);
+      // KEY0按下后反转DS0灯的亮灭
+      LED_TogglePin(GPIOB, GPIO_PIN_5);
     }
 
     /* USER CODE END WHILE */
