@@ -93,7 +93,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    LED_TogglePin(GPIOB, GPIO_PIN_5);
     LED_TogglePin(GPIOE, GPIO_PIN_5);
     HAL_Delay(500);
     /* USER CODE END WHILE */
@@ -158,6 +157,7 @@ static void GPIO_Init(void)
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
   LED_INIT();
+  EXTI_INIT();
   /* USER CODE END MX_GPIO_Init_2 */
 }
 

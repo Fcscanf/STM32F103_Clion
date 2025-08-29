@@ -37,7 +37,9 @@ enable_language(C ASM)
 # Create an executable object type
 add_executable(${CMAKE_PROJECT_NAME}
         Drivers/BSP/LED/led.h
-        Drivers/BSP/LED/led.c)
+        Drivers/BSP/LED/led.c
+        Drivers/BSP/EXTI/exti.h
+        Drivers/BSP/EXTI/exti.c)
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
