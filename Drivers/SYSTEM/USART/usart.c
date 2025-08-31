@@ -23,12 +23,12 @@ void USART1_UART_Init(uint32_t baudrate) {
     huart1.Init.Mode = UART_MODE_TX_RX;
     HAL_UART_Init(&huart1);
 
-    HAL_UARTEx_ReceiveToIdle_IT(&huart1, (uint8_t*)rx_buffer, 1);
+    HAL_UART_Receive_IT(&huart1, (uint8_t*)rx_buffer, 1);
 
 }
 
 /* 串口MSP回调函数 */
-void HAL_UART_Mspinit(UART_HandleTypeDef *huart) {
+void HAL_UART_MspInit(UART_HandleTypeDef *huart) {
     GPIO_InitTypeDef GPIO_InitStruct = {0};
 
     /* 如果是串口1，进行串口1 MSP 初始化 */
@@ -69,20 +69,20 @@ void HAL_UART_Mspinit(UART_HandleTypeDef *huart) {
 /* 串口1中断服务函数 */
 void USART1_IRQHandler(void) {
     HAL_UART_IRQHandler(&huart1);
-    /* 由于上面的函数操作会失能，所以下面需要再次调用使能函数使其后续接收数据发生中断 */
-    HAL_UARTEx_ReceiveToIdle_IT(&huart1, (uint8_t*)rx_buffer, 1);
 }
 
 /* 串口数据接收完成回调函数 */
-void HAL_UART_RxCpItCallback(UART_HandleTypeDef *huart) {
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
     if (huart->Instance == USART1) {
         usart_rx_flag = 1;
+        /* 由于HAL_UART_Receive_IT函数操作会失能，所以下面需要再次调用使能函数使其后续接收数据发生中断 */
+        HAL_UART_Receive_IT(&huart1, (uint8_t*)rx_buffer, 1);
     }
 }
 
 /* 判断接收到数据后进行响应 */
 void USART1_FeedBack(void) {
-    if (usart_rx_flag == 0) {
+    if (usart_rx_flag == 1) {
         HAL_UART_Transmit(&huart1, (uint8_t*)rx_buffer, 1, 1000);
         while (__HAL_UART_GET_FLAG(&huart1, UART_FLAG_TC) != SET);
         // printf("\r\n");

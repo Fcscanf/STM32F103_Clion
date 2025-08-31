@@ -4,7 +4,7 @@
 
 #ifndef STM32F103_CLION_UART_H
 #define STM32F103_CLION_UART_H
-#include <stdint.h>
+// #include <stdint.h>
 #include "stm32f1xx_hal.h"
 #include "stm32f1xx_hal_uart.h"
 
