@@ -4,31 +4,31 @@
 
 #include "usart.h"
 
-UART_HandleTypeDef huart1;
-/* 数据接收缓冲区 */
-uint8_t rx_buffer[1];
-/* 串口接收到数据标志 */
-uint8_t usart_rx_flag = 0;
+#include <stdio.h>
 
 // 重定向 printf 到串口
 
 // MDK/ARMCC/ARMCLANG
 // 在 Keil 的库里，printf 会调用 fputc()。
 // 所以只要重写 int fputc(int ch, FILE *f)，就能把 printf 的输出重定向到串口。
+// MDK 的 printf 调用 fputc → 每个字符顺序可靠
 //
 // GCC (arm-none-eabi-gcc)
 // 在 newlib（GCC 默认的 C 库）里，printf 最终不会直接调用 fputc，而是通过 系统调用接口 _write() 来输出。
 // 如果没有实现 _write()，printf 的输出会丢失或者跑到半主机（semihosting）。
 // 所以在 CLion 里写的 fputc() 并不会被 printf 调用，自然无效。
+// GCC 的 printf 调用 _write → 整块发送，和后续 HAL_UART_Transmit 调用存在竞态。输出顺序会乱
+
 // V1:HAL库版
 // int _write(int file, char *ptr, int len)
 // {
 //     HAL_UART_Transmit(&huart1, (uint8_t *)ptr, len, HAL_MAX_DELAY);
 //     return len;
 // }
+
 // V2:寄存器版
-int _write(int file, char *ptr, int len)
-{
+int _write(int file, char *ptr, int len){
+    (void)file; // 明确表示不使用file参数，避免警告
     for (int i = 0; i < len; i++) {
         while ((USART1->SR & 0X40) == 0);   // 等待上一个字符发送完成
         USART1->DR = (uint8_t)ptr[i];       // 发送字符
@@ -36,7 +36,26 @@ int _write(int file, char *ptr, int len)
     return len;
 }
 
-/* 串口1初始化函数 */
+UART_HandleTypeDef huart1;
+/* HAL库使用串口接收数据缓冲区 */
+uint8_t rx_buffer[1];
+/* 接收到的数据缓冲区 */
+uint8_t data_buffer[USART_REC_LEN];
+/*
+ * 接收状态
+ * bit15 接收完成标识
+ * bit14 接收到0x0d
+ * bit13~0 接收到的有效字节数目
+ */
+uint16_t usart_rx_flag = 0;
+uint8_t data_length = 0;
+uint16_t times = 0;
+
+/* 串口1初始化函数
+ *
+ * @param baudrate：波特率，根据需要设置波特率值
+ * @note 必须正确设置时钟源，否则串口波特率就会设置异常
+ */
 void USART1_UART_Init(uint32_t baudrate) {
     huart1.Instance = USART1;
     huart1.Init.BaudRate = baudrate;
@@ -46,7 +65,7 @@ void USART1_UART_Init(uint32_t baudrate) {
     huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
     huart1.Init.Mode = UART_MODE_TX_RX;
     HAL_UART_Init(&huart1);
-
+    /*该函数会开启接收中断，标志位UART_IT_RXNE，并且设置接收缓冲以及接收缓冲接收最大数据量*/
     HAL_UART_Receive_IT(&huart1, (uint8_t*)rx_buffer, 1);
 
 }
@@ -93,31 +112,67 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart) {
 /* 串口1中断服务函数 */
 void USART1_IRQHandler(void) {
     HAL_UART_IRQHandler(&huart1);
+    /* 由于HAL_UART_Receive_IT函数操作会失能，所以下面需要再次调用使能函数使其后续接收数据发生中断 */
+    while (HAL_UART_Receive_IT(&huart1, (uint8_t*)rx_buffer, 1) != HAL_OK) {
+        /*如果出错会卡死在这里*/
+    }
 }
 
 /* 串口数据接收完成回调函数 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
     if (huart->Instance == USART1) {
-        usart_rx_flag = 1;
-        /* 由于HAL_UART_Receive_IT函数操作会失能，所以下面需要再次调用使能函数使其后续接收数据发生中断 */
-        HAL_UART_Receive_IT(&huart1, (uint8_t*)rx_buffer, 1);
+        /*接收未完成*/
+        if ((usart_rx_flag & 0x8000) == 0) {
+            /*接收到了0x0d（回车键）*/
+            if (usart_rx_flag & 0x4000) {
+                /*接收到的不是0x0a（换行键）*/
+                if (rx_buffer[0] != 0x0a) {
+                    /*接收错误，重新开始*/
+                    usart_rx_flag = 0;
+                } else {
+                    /*接收完成了*/
+                    usart_rx_flag |= 0x8000;
+                }
+            } else {
+                /*还没收到0x0d（回车键）*/
+                if (rx_buffer[0] == 0x0d) {
+                    /*接收错误，重新开始*/
+                    usart_rx_flag |= 0x4000;
+                } else {
+                    data_buffer[usart_rx_flag & 0x3FFF] = rx_buffer[0];
+                    usart_rx_flag++;
+                    if (usart_rx_flag > (USART_REC_LEN - 1)) {
+                        /*数据接收错误，重新开始接收*/
+                        usart_rx_flag = 0;
+                    }
+                }
+            }
+        }
     }
 }
 
 /* 判断接收到数据后进行响应 */
 void USART1_FeedBack(void) {
-    if (usart_rx_flag == 1) {
+    if (usart_rx_flag & 0x8000) {
+        /*得到此次接收到数据的长度*/
+        data_length = usart_rx_flag & 0x3FFF;
         /* printf 和 HAL_UART_Transmit 走的不是同一个通道：
         在 _write 里已经把 printf 重定向到了串口（内部调用 HAL_UART_Transmit）。
         在 printf("您输入的字符为："); 的时候，底层也会发串口数据，但这一步并不是立刻“全部发完”，而是逐字节进入硬件发送移位寄存器。
         紧接着又调用了 HAL_UART_Transmit(&huart1, rx_buffer, 1, …) 去发送接收的那个字符。因为 UART 里 FIFO/移位器的调度，结果是这个字符 可能先发出去。
         所以终端上看起来顺序反了：先出来了 2，再出来提示语。 */
-        printf("您输入的字符为：");
-        HAL_UART_Transmit(&huart1, (uint8_t*)rx_buffer, 1, 1000);
+        printf("您发送的消息为：");
+        HAL_UART_Transmit(&huart1, (uint8_t*)data_buffer, data_length, 1000);
         while (__HAL_UART_GET_FLAG(&huart1, UART_FLAG_TC) != SET);
         printf("\r\n");
         usart_rx_flag = 0;
     } else {
-        HAL_Delay(10);
+        // times++;
+        // if (times % 5000 == 0) {
+        //     printf("串口实验\r\n");
+        // }
+        // if (times % 200 == 0) {
+        //     printf("请输入数据，以回车键结束\r\n");
+        // }
     }
 }
