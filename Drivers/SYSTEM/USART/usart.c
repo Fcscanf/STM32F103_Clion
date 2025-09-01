@@ -4,37 +4,43 @@
 
 #include "usart.h"
 
-UART_HandleTypeDef huart1;
-/* 数据接收缓冲区 */
-uint8_t rx_buffer[1];
-/* 串口接收到数据标志 */
-uint8_t usart_rx_flag = 0;
+#include <stdio.h>
 
 // 重定向 printf 到串口
 
 // MDK/ARMCC/ARMCLANG
 // 在 Keil 的库里，printf 会调用 fputc()。
 // 所以只要重写 int fputc(int ch, FILE *f)，就能把 printf 的输出重定向到串口。
+// MDK 的 printf 调用 fputc → 每个字符顺序可靠
 //
 // GCC (arm-none-eabi-gcc)
 // 在 newlib（GCC 默认的 C 库）里，printf 最终不会直接调用 fputc，而是通过 系统调用接口 _write() 来输出。
 // 如果没有实现 _write()，printf 的输出会丢失或者跑到半主机（semihosting）。
 // 所以在 CLion 里写的 fputc() 并不会被 printf 调用，自然无效。
+// GCC 的 printf 调用 _write → 整块发送，和后续 HAL_UART_Transmit 调用存在竞态。输出顺序会乱
+
 // V1:HAL库版
 // int _write(int file, char *ptr, int len)
 // {
 //     HAL_UART_Transmit(&huart1, (uint8_t *)ptr, len, HAL_MAX_DELAY);
 //     return len;
 // }
+
 // V2:寄存器版
-int _write(int file, char *ptr, int len)
-{
+int _write(int file, char *ptr, int len){
+    (void)file; // 明确表示不使用file参数，避免警告
     for (int i = 0; i < len; i++) {
         while ((USART1->SR & 0X40) == 0);   // 等待上一个字符发送完成
         USART1->DR = (uint8_t)ptr[i];       // 发送字符
     }
     return len;
 }
+
+UART_HandleTypeDef huart1;
+/* 数据接收缓冲区 */
+uint8_t rx_buffer[1];
+/* 串口接收到数据标志 */
+uint8_t usart_rx_flag = 0;
 
 /* 串口1初始化函数 */
 void USART1_UART_Init(uint32_t baudrate) {
