@@ -86,17 +86,21 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   USART1_UART_Init(115200);
+  IWDG_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  printf("请输入一个英文字符：\r\n\r\n");
+  printf("您还没喂狗，请及时喂狗！！！\r\n");
   while (1)
   {
     /* USER CODE END WHILE */
-    USART1_FeedBack();
+    HAL_Delay(1100);
+    // HAL_Delay(1010);
+    IWDG_Feed();
+    printf("已经喂狗！！！\r\n");
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -114,9 +118,10 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
