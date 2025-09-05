@@ -86,17 +86,29 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   USART1_UART_Init(115200);
+  WWDG_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  printf("请输入一个英文字符：\r\n\r\n");
+  if (__HAL_RCC_GET_FLAG(RCC_FLAG_WWDGRST) != RESET) {
+    printf("窗口看门狗复位\r\n");
+    __HAL_RCC_CLEAR_RESET_FLAGS();
+  } else {
+    printf("外部复位\r\n");
+  }
+  printf("请在窗口期内喂狗\r\n");
   while (1)
   {
+    // 窗口期外喂狗会产生复位
+    // HAL_Delay(29);
+    // 窗口期内喂狗不会产生复位
+    HAL_Delay(179);
+    WWDG_Refresh();
     /* USER CODE END WHILE */
-    USART1_FeedBack();
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

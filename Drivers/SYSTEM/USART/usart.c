@@ -42,7 +42,12 @@ uint8_t rx_buffer[1];
 /* 串口接收到数据标志 */
 uint8_t usart_rx_flag = 0;
 
-/* 串口1初始化函数 */
+/* 串口1初始化函数
+  * @brief UART MSP Initialization
+  * This function configures the hardware resources used in this example
+  * @param huart: UART handle pointer
+  * @retval None
+  */
 void USART1_UART_Init(uint32_t baudrate) {
     huart1.Instance = USART1;
     huart1.Init.BaudRate = baudrate;

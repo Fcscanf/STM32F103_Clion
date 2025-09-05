@@ -37,7 +37,9 @@ enable_language(C ASM)
 # Create an executable object type
 add_executable(${CMAKE_PROJECT_NAME}
         Drivers/SYSTEM/USART/usart.h
-        Drivers/SYSTEM/USART/usart.c)
+        Drivers/SYSTEM/USART/usart.c
+        Drivers/BSP/WDG/wdg.h
+        Drivers/BSP/WDG/wdg.c)
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
