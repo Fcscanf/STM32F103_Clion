@@ -84,8 +84,8 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-  GPIO_Init();
-  TIM6_Init();
+  // GPIO_Init();
+  GTIM_TIM3_PWM_CHY_INIT();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -96,7 +96,8 @@ int main(void)
   {
     // LED_TogglePin(GPIOB, GPIO_PIN_5);
     // LED_TogglePin(GPIOE, GPIO_PIN_5);
-    HAL_Delay(500);
+    HAL_Delay(10);
+    TIM3_Compare();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -29,7 +29,7 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal.h"
 #include "../../BSP/LED/led.h"
-#include "../../BSP/BTIM/btim.h"
+#include "../../BSP/GTIM/gtim.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
