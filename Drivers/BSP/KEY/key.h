@@ -1,5 +1,5 @@
 //
-// Created by fcant on 2025/8/27 ÐÇÆÚÈý.
+// Created by fcant on 2025/8/27 æ˜ŸæœŸä¸‰.
 //
 
 #ifndef STM32F103_CLION_KEY_H
