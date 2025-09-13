@@ -1,5 +1,5 @@
 //
-// Created by fcant on 2025/8/28 ĞÇÆÚËÄ.
+// Created by fcant on 2025/8/28 æ˜ŸæœŸå››.
 //
 
 #ifndef STM32F103_CLION_EXTI_H

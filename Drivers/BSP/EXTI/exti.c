@@ -1,5 +1,5 @@
 //
-// Created by fcant on 2025/8/28 ÐÇÆÚËÄ.
+// Created by fcant on 2025/8/28 æ˜ŸæœŸå››.
 //
 
 #include "exti.h"
@@ -19,16 +19,16 @@ void EXTI_INIT(void){
     HAL_NVIC_EnableIRQ(EXTI4_IRQn);
 }
 
-// ×¢²á¹«¹²´¦Àíº¯Êý-ÔÚ.sÎÄ¼þÖÐÒÑÉùÃ÷
+// æ³¨å†Œå…¬å…±å¤„ç†å‡½æ•°-åœ¨.sæ–‡ä»¶ä¸­å·²å£°æ˜Ž
 void EXTI4_IRQHandler(void) {
     HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_4);
-    // Çå³ýÖÐ¶Ï±êÊ¶£¬·ÀÖ¹°´¼üµÄÊÖ¶¯Îó´¥·¢
+    // æ¸…é™¤ä¸­æ–­æ ‡è¯†ï¼Œé˜²æ­¢æŒ‰é”®çš„æ‰‹åŠ¨è¯¯è§¦å‘
     __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_4);
 }
 
-// ÔÚ»Øµ÷º¯ÊýÖÐ¶¨ÒåÓÃ»§´¦ÀíÂß¼­
+// åœ¨å›žè°ƒå‡½æ•°ä¸­å®šä¹‰ç”¨æˆ·å¤„ç†é€»è¾‘
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-    // ¾«Ó¢°æÕâÀïÎÞÐèÏû¶¶
+    // ç²¾è‹±ç‰ˆè¿™é‡Œæ— éœ€æ¶ˆæŠ–
     // HAL_Delay(20);
     if (GPIO_Pin == GPIO_PIN_4) {
         if (HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_4) == GPIO_PIN_RESET) {
