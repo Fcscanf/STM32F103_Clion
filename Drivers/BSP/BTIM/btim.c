@@ -1,5 +1,5 @@
 //
-// Created by fcant on 2025/9/8 ÐÇÆÚÒ».
+// Created by fcant on 2025/9/8 æ˜ŸæœŸä¸€.
 //
 
 #include "btim.h"
@@ -86,14 +86,14 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* htim_base)
 }
 
 /*
- * ¶¨Ê±Æ÷6ÖÐ¶Ï·þÎñº¯Êý
+ * å®šæ—¶å™¨6ä¸­æ–­æœåŠ¡å‡½æ•°
  */
 void TIM6_IRQHandler(void) {
     HAL_TIM_IRQHandler(&htim6);
 }
 
 /*
- * ¶¨Ê±Æ÷Òç³öÖÐ¶Ï»Øµ÷º¯Êý
+ * å®šæ—¶å™¨æº¢å‡ºä¸­æ–­å›žè°ƒå‡½æ•°
  */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     if (htim->Instance==TIM6) {
