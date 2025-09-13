@@ -1,5 +1,5 @@
 //
-// Created by fcant on 2025/9/5 ĞÇÆÚÎå.
+// Created by fcant on 2025/9/5 æ˜ŸæœŸäº”.
 //
 
 #include "wdg.h"
@@ -7,7 +7,7 @@
 WWDG_HandleTypeDef hwwdg;
 
 /**
-  * ´°¿Ú¿´ÃÅ¹·³õÊ¼»¯º¯Êı
+  * çª—å£çœ‹é—¨ç‹—åˆå§‹åŒ–å‡½æ•°
   * @brief WWDG Initialization Function
   * @param None
   * @retval None
@@ -36,7 +36,7 @@ void WWDG_Init(void){
 }
 
 /**
-  * WWDG MSP»Øµ÷º¯Êı
+  * WWDG MSPå›è°ƒå‡½æ•°
   * @brief WWDG MSP Initialization
   * This function configures the hardware resources used in this example
   * @param hwwdg: WWDG handle pointer
@@ -60,14 +60,14 @@ void HAL_WWDG_MspInit(WWDG_HandleTypeDef* hwwdg)
 
 }
 
-/* WWDGÖĞ¶Ï·şÎñº¯Êı */
+/* WWDGä¸­æ–­æœåŠ¡å‡½æ•° */
 void WWDG_IRQHandler(void) {
     HAL_WWDG_IRQHandler(&hwwdg);
 }
 
-/* WWDGÌáÇ°»½ĞÑ»Øµ÷º¯Êı */
+/* WWDGæå‰å”¤é†’å›è°ƒå‡½æ•° */
 void HAL_WWDG_EarlyWakeupCallback(WWDG_HandleTypeDef *hwwdg) {
-    // ÖĞ¶ÏÀï¼°Ê±Î¹¹·²»»á²úÉú¸´Î»
+    // ä¸­æ–­é‡ŒåŠæ—¶å–‚ç‹—ä¸ä¼šäº§ç”Ÿå¤ä½
     // HAL_WWDG_Refresh(hwwdg);
     // printf("HAL_WWDG_EarlyWakeupCallback WWDG_Refresh\r\n");
 }

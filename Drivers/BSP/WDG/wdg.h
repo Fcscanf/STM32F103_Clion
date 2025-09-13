@@ -1,5 +1,5 @@
 //
-// Created by fcant on 2025/9/5 ĞÇÆÚÎå.
+// Created by fcant on 2025/9/5 æ˜ŸæœŸäº”.
 //
 
 #ifndef STM32F103_CLION_WDG_H
