@@ -1,25 +1,25 @@
 //
-// Created by fcant on 2025/9/2 ĞÇÆÚ¶ş.
+// Created by fcant on 2025/9/2 æ˜ŸæœŸäºŒ.
 //
 
 #include "wdg.h"
 
 IWDG_HandleTypeDef hiwdg;
 
-/*IWDG³õÊ¼»¯º¯Êı*/
+/*IWDGåˆå§‹åŒ–å‡½æ•°*/
 void IWDG_Init(void) {
 
     hiwdg.Instance = IWDG;
     hiwdg.Init.Prescaler = IWDG_PRESCALER_32;
     hiwdg.Init.Reload = 1250;
-    /*Òç³öÊ±¼äÔ¼Îª1s*/
+    /*æº¢å‡ºæ—¶é—´çº¦ä¸º1s*/
     if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
     {
 
     }
 }
 
-/*Î¹¹·º¯Êı*/
+/*å–‚ç‹—å‡½æ•°*/
 void IWDG_Feed(void) {
     HAL_IWDG_Refresh(&hiwdg);
 }
