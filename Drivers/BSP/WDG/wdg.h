@@ -7,7 +7,6 @@
 
 #include <stdio.h>
 #include "stm32f1xx_hal.h"
-#include "stm32f1xx_hal_wwdg.h"
 
 void WWDG_Init(void);
 void WWDG_Refresh(void);
