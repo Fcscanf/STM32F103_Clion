@@ -6,7 +6,6 @@
 #define STM32F103_CLION_WDG_H
 
 #include "stm32f1xx_hal.h"
-#include "stm32f1xx_hal_iwdg.h"
 
 void IWDG_Init(void);
 void IWDG_Feed(void);
