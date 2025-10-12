@@ -8,7 +8,7 @@
 #include "stm32f1xx_hal.h"
 #include "../LED/led.h"
 
-void GTIM_TIM3_PWM_CHY_INIT(void);
-void TIM3_Compare(void);
+void GTIM_TIM5_CAP_CHY_INIT(void);
+void CAP_IC(void);
 
 #endif //STM32F103_CLION_BTIM_H
