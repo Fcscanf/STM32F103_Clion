@@ -54,7 +54,7 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef* htim_base)
         /* 推挽复用 */
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP; /* 复用推挽输出 */
         GPIO_InitStruct.Pull = GPIO_PULLDOWN; /* 下拉 */
-        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; /* 高数 */
+        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; /* 高速 */
         HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
         HAL_NVIC_SetPriority(TIM5_IRQn, 1, 3); /* 抢占1，子优先级3 */
