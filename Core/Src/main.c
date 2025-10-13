@@ -85,7 +85,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   GPIO_Init();
-  GTIM_TIM5_CAP_CHY_INIT();
+  GTIM_TIM2_CAP_CHY_INIT();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -96,7 +96,7 @@ int main(void)
   {
     // LED_TogglePin(GPIOB, GPIO_PIN_5);
     // LED_TogglePin(GPIOE, GPIO_PIN_5);
-    CAP_IC();
+    PULSE_COUNT();
     HAL_Delay(10);
     /* USER CODE END WHILE */
 
@@ -160,6 +160,7 @@ static void GPIO_Init(void)
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
   LED_INIT();
+  KEY_INIT();
   /* USER CODE END MX_GPIO_Init_2 */
 }
 
