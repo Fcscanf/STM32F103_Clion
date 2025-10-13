@@ -7,6 +7,7 @@
 
 #include "stm32f1xx_hal.h"
 #include "../LED/led.h"
+#include "../KEY/key.h"
 
 void GTIM_TIM2_CAP_CHY_INIT(void);
 void PULSE_COUNT(void);

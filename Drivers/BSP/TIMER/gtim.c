@@ -63,6 +63,10 @@ uint16_t oldcnt;
 uint8_t key;
 uint8_t t = 0;
 void PULSE_COUNT(void) {
+    key = KEY_SCAN(0);
+    if (key == KEY0_PRES) {
+        __HAL_TIM_SET_COUNTER(&htim2_cnt_cap_chy, 0);
+    }
     curcnt = __HAL_TIM_GET_COUNTER(&htim2_cnt_cap_chy);
     if (oldcnt != curcnt) {
         oldcnt = curcnt;
