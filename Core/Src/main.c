@@ -161,6 +161,7 @@ static void GPIO_Init(void)
   /* USER CODE BEGIN MX_GPIO_Init_2 */
   LED_INIT();
   KEY_INIT();
+  USART1_UART_Init(115200);
   /* USER CODE END MX_GPIO_Init_2 */
 }
 

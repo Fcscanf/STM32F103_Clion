@@ -31,6 +31,7 @@ extern "C" {
 #include "../../BSP/LED/led.h"
 #include "../../BSP/KEY/key.h"
 #include "../../BSP/TIMER/gtim.h"
+#include "../../Drivers/SYSTEM/USART/usart.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
