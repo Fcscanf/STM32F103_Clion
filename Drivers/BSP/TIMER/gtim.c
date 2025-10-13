@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 
-TIM_HandleTypeDef htim2_ic_cap_chy;
+TIM_HandleTypeDef htim2_cnt_cap_chy;
 
 /**
   * @brief 通用定时器通道y 脉冲计数 初始化函数
@@ -18,12 +18,12 @@ void GTIM_TIM2_CAP_CHY_INIT(void) {
     uint16_t arr = 65535;
     uint16_t psc = 0;
 
-    htim2_ic_cap_chy.Instance = TIM2;
-    htim2_ic_cap_chy.Init.Prescaler = psc; /* 定时器分频 */
-    htim2_ic_cap_chy.Init.CounterMode = TIM_COUNTERMODE_UP; /* 递增计数模式 */
-    htim2_ic_cap_chy.Init.Period = arr; /* 自动重装载值 */
+    htim2_cnt_cap_chy.Instance = TIM2;
+    htim2_cnt_cap_chy.Init.Prescaler = psc; /* 定时器分频 */
+    htim2_cnt_cap_chy.Init.CounterMode = TIM_COUNTERMODE_UP; /* 递增计数模式 */
+    htim2_cnt_cap_chy.Init.Period = arr; /* 自动重装载值 */
     // htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-    if (HAL_TIM_IC_Init(&htim2_ic_cap_chy) != HAL_OK) {
+    if (HAL_TIM_IC_Init(&htim2_cnt_cap_chy) != HAL_OK) {
     }
 
     TIM_SlaveConfigTypeDef TIM_SlaveConfig_InitStruct = {0};
@@ -31,9 +31,9 @@ void GTIM_TIM2_CAP_CHY_INIT(void) {
     TIM_SlaveConfig_InitStruct.InputTrigger = TIM_TS_TI1FP1; /* 输入触发源 */
     TIM_SlaveConfig_InitStruct.TriggerPolarity = TIM_TRIGGERPOLARITY_RISING; /* 输入触发极性 */
     TIM_SlaveConfig_InitStruct.TriggerFilter = 0; /* 输入滤波器配置 */
-    HAL_TIM_SlaveConfigSynchro(&htim2_ic_cap_chy, &TIM_SlaveConfig_InitStruct);
+    HAL_TIM_SlaveConfigSynchro(&htim2_cnt_cap_chy, &TIM_SlaveConfig_InitStruct);
 
-    HAL_TIM_IC_Start(&htim2_ic_cap_chy, TIM_CHANNEL_1);
+    HAL_TIM_IC_Start(&htim2_cnt_cap_chy, TIM_CHANNEL_1);
 
 }
 
@@ -63,8 +63,8 @@ uint16_t oldcnt;
 uint8_t key;
 uint8_t t = 0;
 void PULSE_COUNT(void) {
-    curcnt = __HAL_TIM_GET_COUNTER(&htim2_ic_cap_chy);
-    if (curcnt != oldcnt) {
+    curcnt = __HAL_TIM_GET_COUNTER(&htim2_cnt_cap_chy);
+    if (oldcnt != curcnt) {
         oldcnt = curcnt;
         printf("CNT:%d\r\n", oldcnt);
     }
