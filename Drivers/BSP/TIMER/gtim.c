@@ -43,7 +43,7 @@ void GTIM_TIM5_CAP_CHY_INIT(void) {
   * @param htim_base: TIM_Base handle pointer
   * @retval None
   */
-void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef* htim_base)
+void HAL_TIM_IC_MspInit(TIM_HandleTypeDef* htim_base)
 {
     if(htim_base->Instance==TIM5) {
         GPIO_InitTypeDef GPIO_InitStruct = {0};
