@@ -26,6 +26,7 @@ void GTIM_TIM2_CAP_CHY_INIT(void) {
     if (HAL_TIM_IC_Init(&htim2_cnt_cap_chy) != HAL_OK) {
     }
 
+    // 配置定时器的从模式
     TIM_SlaveConfigTypeDef TIM_SlaveConfig_InitStruct = {0};
     TIM_SlaveConfig_InitStruct.SlaveMode = TIM_SLAVEMODE_EXTERNAL1; /* 从模式选择 */
     TIM_SlaveConfig_InitStruct.InputTrigger = TIM_TS_TI1FP1; /* 输入触发源 */
@@ -33,6 +34,7 @@ void GTIM_TIM2_CAP_CHY_INIT(void) {
     TIM_SlaveConfig_InitStruct.TriggerFilter = 0; /* 输入滤波器配置 */
     HAL_TIM_SlaveConfigSynchro(&htim2_cnt_cap_chy, &TIM_SlaveConfig_InitStruct);
 
+    // 使能输入捕获并启动计数器
     HAL_TIM_IC_Start(&htim2_cnt_cap_chy, TIM_CHANNEL_1);
 
 }
@@ -42,7 +44,7 @@ void GTIM_TIM2_CAP_CHY_INIT(void) {
   * @param htim_base: TIM_Base handle pointer
   * @retval None
   */
-void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef* htim_base)
+void HAL_TIM_IC_MspInit(TIM_HandleTypeDef* htim_base)
 {
     if(htim_base->Instance==TIM2) {
         GPIO_InitTypeDef GPIO_InitStruct = {0};
