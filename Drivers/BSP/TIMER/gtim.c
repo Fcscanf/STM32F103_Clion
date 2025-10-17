@@ -29,7 +29,8 @@ void GTIM_TIM2_CAP_CHY_INIT(void) {
     // 配置定时器的从模式
     TIM_SlaveConfigTypeDef TIM_SlaveConfig_InitStruct = {0};
     TIM_SlaveConfig_InitStruct.SlaveMode = TIM_SLAVEMODE_EXTERNAL1; /* 从模式选择 */
-    TIM_SlaveConfig_InitStruct.InputTrigger = TIM_TS_TI1FP1; /* 输入触发源 */
+    // TIM_SlaveConfig_InitStruct.InputTrigger = TIM_TS_TI1FP1; /* 输入触发源：上升沿 */
+    TIM_SlaveConfig_InitStruct.InputTrigger = TIM_TS_TI1F_ED; /* 输入触发源：双边沿 */
     TIM_SlaveConfig_InitStruct.TriggerPolarity = TIM_TRIGGERPOLARITY_RISING; /* 输入触发极性 */
     TIM_SlaveConfig_InitStruct.TriggerFilter = 0; /* 输入滤波器配置 */
     HAL_TIM_SlaveConfigSynchro(&htim2_cnt_cap_chy, &TIM_SlaveConfig_InitStruct);
