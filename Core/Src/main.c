@@ -85,7 +85,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   GPIO_Init();
-  GTIM_TIM2_CAP_CHY_INIT();
+  ATIM_TIM8_NPWM_INIT(5000 - 1, 7200 - 1);
+  ATIM_TIM8_NPWM_CHY_SET(5);
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -96,7 +97,7 @@ int main(void)
   {
     // LED_TogglePin(GPIOB, GPIO_PIN_5);
     // LED_TogglePin(GPIOE, GPIO_PIN_5);
-    PULSE_COUNT();
+    OUTPUT_NPWM();
     HAL_Delay(10);
     /* USER CODE END WHILE */
 

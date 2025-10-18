@@ -9,7 +9,10 @@
 #include "../LED/led.h"
 #include "../KEY/key.h"
 
-void GTIM_TIM2_CAP_CHY_INIT(void);
-void PULSE_COUNT(void);
+void ATIM_TIM8_NPWM_INIT(uint16_t arr, uint16_t psc);
+
+void ATIM_TIM8_NPWM_CHY_SET(uint8_t npwm);
+
+void OUTPUT_NPWM(void);
 
 #endif //STM32F103_CLION_BTIM_H

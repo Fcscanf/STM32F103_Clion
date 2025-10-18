@@ -40,8 +40,8 @@ add_executable(${CMAKE_PROJECT_NAME}
         Drivers/BSP/LED/led.c
         Drivers/SYSTEM/USART/usart.h
         Drivers/SYSTEM/USART/usart.c
-        Drivers/BSP/TIMER/gtim.h
-        Drivers/BSP/TIMER/gtim.c
+        Drivers/BSP/TIMER/atim.h
+        Drivers/BSP/TIMER/atim.c
         Drivers/BSP/KEY/key.h
         Drivers/BSP/KEY/key.c)
 

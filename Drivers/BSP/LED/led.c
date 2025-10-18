@@ -17,6 +17,8 @@ void LED_INIT(void){
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+    /* 通过杜邦线连接PC6与PE5，所以需要把PE5设置为输入，避免与PC6的输出冲突 */
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
     HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 }
 
