@@ -15,6 +15,7 @@ TIM_HandleTypeDef htim5_ic_cap_chy;
   */
 void GTIM_TIM5_CAP_CHY_INIT(void) {
 
+    /* 以 1Mhz 的频率计数 捕获 */
     uint16_t arr = 0XFFFF;
     uint16_t psc = 72 - 1;
 
@@ -29,12 +30,14 @@ void GTIM_TIM5_CAP_CHY_INIT(void) {
     TIM_IC_InitTypeDef TIM_IC_InitStruct;
     TIM_IC_InitStruct.ICPolarity = TIM_ICPOLARITY_RISING; /* 上升沿捕获 */
     TIM_IC_InitStruct.ICSelection = TIM_ICSELECTION_DIRECTTI; /* 映射到TI1上 */
-    TIM_IC_InitStruct.ICPrescaler = TIM_ICPSC_DIV1; /* 配置输入分频 */
-    TIM_IC_InitStruct.ICFilter = 0; /* 配置输入滤波器 */
+    TIM_IC_InitStruct.ICPrescaler = TIM_ICPSC_DIV1; /* 配置输入分频，不分频 */
+    TIM_IC_InitStruct.ICFilter = 0; /* 配置输入滤波器，不滤波 */
+    /* 配置 TIM5 通道 1 */
     HAL_TIM_IC_ConfigChannel(&htim5_ic_cap_chy, &TIM_IC_InitStruct, TIM_CHANNEL_1);
 
     __HAL_TIM_ENABLE_IT(&htim5_ic_cap_chy, TIM_IT_UPDATE); /* 使能更新中断 */
-    HAL_TIM_IC_Start(&htim5_ic_cap_chy, TIM_CHANNEL_1); /* 开始捕获TIM5的 */
+    /* 使能通道输入以及使能捕获中断*/
+    HAL_TIM_IC_Start_IT(&htim5_ic_cap_chy, TIM_CHANNEL_1);
 
 }
 
@@ -99,7 +102,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
                 __HAL_TIM_DISABLE(&htim5_ic_cap_chy); /* 关闭定时器5 */
                 __HAL_TIM_SET_COUNTER(&htim5_ic_cap_chy, 0); /* 定时器5计数器清零 */
                 TIM_RESET_CAPTUREPOLARITY(&htim5_ic_cap_chy, TIM_CHANNEL_1); /* 一定要先清除原来的设置 */
-                TIM_SET_CAPTUREPOLARITY(&htim5_ic_cap_chy, TIM_CHANNEL_1, TIM_ICPOLARITY_RISING);
+                TIM_SET_CAPTUREPOLARITY(&htim5_ic_cap_chy, TIM_CHANNEL_1, TIM_ICPOLARITY_RISING); /* 定时器 5 通道 1 设置为下降沿捕获 */
                 __HAL_TIM_ENABLE(&htim5_ic_cap_chy); /* 使能定时器5 */
             }
         }
