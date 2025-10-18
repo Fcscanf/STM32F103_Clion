@@ -11,8 +11,8 @@
 
 void ATIM_TIM8_NPWM_INIT(uint16_t arr, uint16_t psc);
 
-void ATIM_TIM8_NPWM_CHY_SET(uint8_t npwm);
+void ATIM_TIM8_SET_COMPARE();
 
-void OUTPUT_NPWM(void);
+void WORKING(void);
 
 #endif //STM32F103_CLION_BTIM_H
