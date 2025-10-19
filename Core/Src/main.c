@@ -85,8 +85,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   GPIO_Init();
-  ATIM_TIM8_NPWM_INIT(1000 - 1, 72 - 1);
-  ATIM_TIM8_SET_COMPARE();
+  ATIM_TIM1_CPLM_NPWM_INIT(1000 - 1, 72 - 1);
+  ATIM_TIM1_CPLM_SET(700 - 1, 100);
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
