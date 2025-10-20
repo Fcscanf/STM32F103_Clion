@@ -30,9 +30,9 @@ void ATIM_TIM1_CPLM_NPWM_INIT(uint16_t arr, uint16_t psc) {
     TIM_OC_InitTypeDef tim_oc_cplm_pwm = {0};
     tim_oc_cplm_pwm.OCMode = TIM_OCMODE_PWM1; /* 模式选择 */
     tim_oc_cplm_pwm.OCPolarity = TIM_OCPOLARITY_HIGH; /* OCy 高电平有效 */
-    tim_oc_cplm_pwm.OCNPolarity = TIM_OCPOLARITY_HIGH; /* OCyN 高电平有效 */
+    tim_oc_cplm_pwm.OCNPolarity = TIM_OCNPOLARITY_HIGH; /* OCyN 高电平有效 */
     tim_oc_cplm_pwm.OCIdleState = TIM_OCIDLESTATE_RESET; /* 当MOE=0，OCx=0 */
-    tim_oc_cplm_pwm.OCNIdleState = TIM_OCIDLESTATE_RESET; /* 当MOE=0，OCxN=0 */
+    tim_oc_cplm_pwm.OCNIdleState = TIM_OCNIDLESTATE_RESET; /* 当MOE=0，OCxN=0 */
     HAL_TIM_PWM_ConfigChannel(&htim1_cplm_pwm, &tim_oc_cplm_pwm, TIM_CHANNEL_1);
 
     /* 设置死区参数，开启死区中断 */
