@@ -19,6 +19,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
+#include <stdio.h>
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -85,8 +87,9 @@ int main(void)
 
   /* Initialize all configured peripherals */
   GPIO_Init();
-  ATIM_TIM1_CPLM_NPWM_INIT(1000 - 1, 72 - 1);
-  ATIM_TIM1_CPLM_SET(700 - 1, 100);
+  GTIM_TIM3_PWM_CHY_INIT(10 - 1, 72 - 1);
+  TIM3->CCR2 = 5;
+  ATIM_TIM8_PWMIN_CHY_INIT();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
