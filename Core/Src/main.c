@@ -87,9 +87,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   GPIO_Init();
-  GTIM_TIM3_PWM_CHY_INIT(10 - 1, 72 - 1);
-  TIM3->CCR2 = 5;
-  ATIM_TIM8_PWMIN_CHY_INIT();
+  tpad_init(6);
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -100,7 +98,7 @@ int main(void)
   {
     // LED_TogglePin(GPIOB, GPIO_PIN_5);
     // LED_TogglePin(GPIOE, GPIO_PIN_5);
-    WORKING();
+    working();
     HAL_Delay(10);
     /* USER CODE END WHILE */
 
