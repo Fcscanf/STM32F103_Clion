@@ -1,81 +1,84 @@
 //
-// Created by fcant on 2025/10/28 ÐÇÆÚ¶þ.
+// Created by fcant on 2025/10/28 æ˜ŸæœŸäºŒ.
 //
 
 #ifndef STM32F103_CLION_OLED_H
 #define STM32F103_CLION_OLED_H
 
 /******************************************************************************************/
-/* OLED 8080 Ä£Ê½Òý½Å ¶¨Òå */
+/* OLED 8080 æ¨¡å¼å¼•è„š å®šä¹‰ */
 
-/* Æ¬Ñ¡½Å */
+/* ç‰‡é€‰è„š */
 #define OLED_CS_PORT                GPIOD
 #define OLED_CS_PIN                 GPIO_PIN_6
-#define OLED_CS_CLK_ENABLE()        do{ __HAL_RCC_GPIOD_CLK_ENABLE(); }while(0)   /* PD¿ÚÊ±ÖÓÊ¹ÄÜ */
+#define OLED_CS_CLK_ENABLE()        do{ __HAL_RCC_GPIOD_CLK_ENABLE(); }while(0)   /* PDå£æ—¶é’Ÿä½¿èƒ½ */
 
-/* Êý¾ÝÀàÐÍ½Å ÃüÁî/Êý¾Ý*/
+/* æ•°æ®ç±»åž‹è„š å‘½ä»¤/æ•°æ®*/
 #define OLED_RS_PORT                GPIOD
 #define OLED_RS_PIN                 GPIO_PIN_3
-#define OLED_RS_CLK_ENABLE()        do{ __HAL_RCC_GPIOD_CLK_ENABLE(); }while(0)   /* PD¿ÚÊ±ÖÓÊ¹ÄÜ */
+#define OLED_RS_CLK_ENABLE()        do{ __HAL_RCC_GPIOD_CLK_ENABLE(); }while(0)   /* PDå£æ—¶é’Ÿä½¿èƒ½ */
 
-/* ÏòOLED¶ÁÈ¡Êý¾Ý½Å */
+/* å‘OLEDè¯»å–æ•°æ®è„š */
 #define OLED_RD_PORT                GPIOG
 #define OLED_RD_PIN                 GPIO_PIN_13
-#define OLED_RD_CLK_ENABLE()        do{ __HAL_RCC_GPIOG_CLK_ENABLE(); }while(0)   /* PG¿ÚÊ±ÖÓÊ¹ÄÜ */
+#define OLED_RD_CLK_ENABLE()        do{ __HAL_RCC_GPIOG_CLK_ENABLE(); }while(0)   /* PGå£æ—¶é’Ÿä½¿èƒ½ */
 
-/* ÏòOLEDÐ´ÈëÊý¾Ý½Å */
+/* å‘OLEDå†™å…¥æ•°æ®è„š */
 #define OLED_WR_PORT                GPIOG
 #define OLED_WR_PIN                 GPIO_PIN_14
-#define OLED_WR_CLK_ENABLE()        do{ __HAL_RCC_GPIOG_CLK_ENABLE(); }while(0)   /* PG¿ÚÊ±ÖÓÊ¹ÄÜ */
+#define OLED_WR_CLK_ENABLE()        do{ __HAL_RCC_GPIOG_CLK_ENABLE(); }while(0)   /* PGå£æ—¶é’Ÿä½¿èƒ½ */
 
-/* ¸´Î»½Å */
+/* å¤ä½è„š */
 #define OLED_RST_PORT               GPIOG
 #define OLED_RST_PIN                GPIO_PIN_15
-#define OLED_RST_CLK_ENABLE()       do{ __HAL_RCC_GPIOG_CLK_ENABLE(); }while(0)   /* PG¿ÚÊ±ÖÓÊ¹ÄÜ */
+#define OLED_RST_CLK_ENABLE()       do{ __HAL_RCC_GPIOG_CLK_ENABLE(); }while(0)   /* PGå£æ—¶é’Ÿä½¿èƒ½ */
 
-/* Êý¾Ý½Å */
+/* æ•°æ®è„š */
 #define OLED_DATA_PORT               GPIOC
 #define OLED_DATA_PIN                GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7
-#define OLED_DATA_CLK_ENABLE()       do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)   /* PC¿ÚÊ±ÖÓÊ¹ÄÜ */
+#define OLED_DATA_CLK_ENABLE()       do{ __HAL_RCC_GPIOC_CLK_ENABLE(); }while(0)   /* PCå£æ—¶é’Ÿä½¿èƒ½ */
 /******************************************************************************************/
 
-/* OLED 8080Ä£Ê½Ïà¹Ø¶Ë¿Ú¿ØÖÆº¯Êý ¶¨Òå */
+/* OLED 8080æ¨¡å¼ç›¸å…³ç«¯å£æŽ§åˆ¶å‡½æ•° å®šä¹‰ */
 #define OLED_RST(x)     do{ x ? \
                                   HAL_GPIO_WritePin(OLED_RST_PORT, OLED_RST_PIN, GPIO_PIN_SET) : \
                                   HAL_GPIO_WritePin(OLED_RST_PORT, OLED_RST_PIN, GPIO_PIN_RESET); \
-                        }while(0)       /* ÉèÖÃRSTÒý½Å */
+                        }while(0)       /* è®¾ç½®RSTå¼•è„š */
 
 #define OLED_CS(x)      do{ x ? \
                                   HAL_GPIO_WritePin(OLED_CS_PORT, OLED_CS_PIN, GPIO_PIN_SET) : \
                                   HAL_GPIO_WritePin(OLED_CS_PORT, OLED_CS_PIN, GPIO_PIN_RESET); \
-                        }while(0)       /* ÉèÖÃCSÒý½Å */
+                        }while(0)       /* è®¾ç½®CSå¼•è„š */
 #define OLED_RS(x)      do{ x ? \
                                   HAL_GPIO_WritePin(OLED_RS_PORT, OLED_RS_PIN, GPIO_PIN_SET) : \
                                   HAL_GPIO_WritePin(OLED_RS_PORT, OLED_RS_PIN, GPIO_PIN_RESET); \
-                        }while(0)       /* ÉèÖÃRSÒý½Å */
+                        }while(0)       /* è®¾ç½®RSå¼•è„š */
 
 #define OLED_WR(x)      do{ x ? \
                                   HAL_GPIO_WritePin(OLED_WR_PORT, OLED_WR_PIN, GPIO_PIN_SET) :  \
                                   HAL_GPIO_WritePin(OLED_WR_PORT, OLED_WR_PIN, GPIO_PIN_RESET); \
-                        } while (0)     /* ÉèÖÃWRÒý½Å */
+                        } while (0)     /* è®¾ç½®WRå¼•è„š */
 
 #define OLED_RD(x)      do{ x ? \
                                   HAL_GPIO_WritePin(OLED_RD_PORT, OLED_RD_PIN, GPIO_PIN_SET) : \
                                   HAL_GPIO_WritePin(OLED_RD_PORT, OLED_RD_PIN, GPIO_PIN_RESET); \
-                        }while(0)       /* ÉèÖÃRDÒý½Å */
+                        }while(0)       /* è®¾ç½®RDå¼•è„š */
 
-/* ÃüÁî/Êý¾Ý ¶¨Òå */
-#define OLED_CMD        0       /* Ð´ÃüÁî */
-#define OLED_DATA       1       /* Ð´Êý¾Ý */
+/* å‘½ä»¤/æ•°æ® å®šä¹‰ */
+#define OLED_CMD        0       /* å†™å‘½ä»¤ */
+#define OLED_DATA       1       /* å†™æ•°æ® */
 
 /******************************************************************************************/
 #include <stdint.h>
 
-void oled_wr_byte(uint8_t data, uint8_t cmd);    /* Ð´Ò»¸ö×Ö½Úµ½OLED */
-void oled_init(void);           /* OLED³õÊ¼»¯ */
+void oled_wr_byte(uint8_t data, uint8_t cmd); /* å†™ä¸€ä¸ªå­—èŠ‚åˆ°OLED */
+void oled_init(void); /* OLEDåˆå§‹åŒ– */
 void oled_clear(void);
+
 void oled_refresh_gram(void);
+
 void oled_draw_point_test(uint8_t x, uint8_t y);
+
 void oled_show_char_test(uint8_t x, uint8_t y, uint8_t mode);
 
 
