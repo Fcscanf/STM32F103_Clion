@@ -19,6 +19,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
+#include <stdio.h>
+
+#include "../../BSP/LCD/lcd.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -86,16 +89,83 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   LED_INIT();
+  lcd_init();
   /* USER CODE BEGIN 2 */
+  uint16_t point_value = 0;
+  uint8_t x = 0;
+  lcd_draw_point(0, 0, RED);
+  lcd_draw_point(0, 1, RED);
+  lcd_draw_point(100, 100, RED);
 
+  /* 0xF800 */
+  point_value = lcd_read_point(100, 100);
+  printf("point_value:%#x \r\n",point_value);
+
+  lcd_show_char(0, 0, 'A', 16, 1, RED);
+  lcd_show_char(100, 100, 'B', 24, 1, RED);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    switch (x)
+    {
+      case 0:
+        lcd_clear(WHITE);
+        break;
+
+      case 1:
+        lcd_clear(BLACK);
+        break;
+
+      case 2:
+        lcd_clear(BLUE);
+        break;
+
+      case 3:
+        lcd_clear(RED);
+        break;
+
+      case 4:
+        lcd_clear(MAGENTA);
+        break;
+
+      case 5:
+        lcd_clear(GREEN);
+        break;
+
+      case 6:
+        lcd_clear(CYAN);
+        break;
+
+      case 7:
+        lcd_clear(YELLOW);
+        break;
+
+      case 8:
+        lcd_clear(BRRED);
+        break;
+
+      case 9:
+        lcd_clear(GRAY);
+        break;
+
+      case 10:
+        lcd_clear(LGRAY);
+        break;
+
+      case 11:
+        lcd_clear(BROWN);
+        break;
+    }
+
+    x++;
+
+    if (x == 12)
+      x = 0;
+
     LED_TogglePin(GPIOB, GPIO_PIN_5);
-    LED_TogglePin(GPIOE, GPIO_PIN_5);
     HAL_Delay(500);
     /* USER CODE END WHILE */
 
