@@ -18,7 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "../../BSP/OLED/oled.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -86,7 +86,19 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   /* USER CODE BEGIN 2 */
+  oled_init();
+  oled_clear();
 
+  // 描点实验
+  // oled_draw_point_test(0, 0);
+  // oled_draw_point_test(10, 0);
+  // oled_draw_point_test(10, 10);
+  // oled_draw_point_test(20, 20);
+
+  // 展示一个字符
+  oled_show_char_test(10, 10 ,1);
+
+  oled_refresh_gram();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -94,7 +106,6 @@ int main(void)
   while (1)
   {
     LED_TogglePin(GPIOB, GPIO_PIN_5);
-    LED_TogglePin(GPIOE, GPIO_PIN_5);
     HAL_Delay(500);
     /* USER CODE END WHILE */
 
