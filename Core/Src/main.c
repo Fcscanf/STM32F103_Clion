@@ -85,6 +85,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   GPIO_Init();
+  LED_INIT();
   /* USER CODE BEGIN 2 */
   oled_init();
   oled_clear();
@@ -164,7 +165,7 @@ static void GPIO_Init(void)
   /*Configure GPIO pin Output Level */
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
-  LED_INIT();
+
   /* USER CODE END MX_GPIO_Init_2 */
 }
 
