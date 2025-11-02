@@ -91,13 +91,19 @@ int main(void)
   LED_INIT();
   lcd_init();
   /* USER CODE BEGIN 2 */
-  uint8_t x = 0;
-  uint8_t lcd_id[12];
-  g_point_color = RED;
-  sprintf((char *)lcd_id, "LCD ID:%04X", lcddev.id);  /* 将LCD ID打印到lcd_id数组 */
+  lcd_draw_point(0, 0, RED);
+  lcd_draw_point(0, 1, RED);
+  lcd_draw_point(100, 100, RED);
 
-  while (1)
+  uint16_t point_value = 0;
+  uint8_t x = 0;
+  /* 0xF800 */
+  point_value = lcd_read_point(100, 100);
+  printf("point_value:%#x \r\n",point_value);
+
+  while(1)
   {
+
     switch (x)
     {
       case 0:
@@ -149,14 +155,9 @@ int main(void)
         break;
     }
 
-    lcd_show_string(10, 40, 240, 32, 32, "STM32", RED);
-    lcd_show_string(10, 80, 240, 24, 24, "TFTLCD TEST", RED);
-    lcd_show_string(10, 110, 240, 16, 16, "ATOM@ALIENTEK", RED);
-    lcd_show_string(10, 130, 240, 16, 16, (char *)lcd_id, RED); /* 显示LCD ID */
     x++;
 
-    if (x == 12)
-      x = 0;
+    if (x == 12)x = 0;
 
     LED_TogglePin(GPIOB, GPIO_PIN_5);
     HAL_Delay(500);
