@@ -19,6 +19,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
+#include <stdio.h>
+#include "../../SYSTEM/USART/usart.h"
+#include "../../BSP/RTC/rtc.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -86,6 +89,8 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   LED_INIT();
+  USART1_UART_Init(115200);
+  rtc_init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -94,8 +99,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    rtc_get_time();
+    printf("Date:%04d-%02d-%02d ", calendar.year, calendar.month, calendar.date);
+    printf("Time:%02d:%02d:%02d \r\n", calendar.hour, calendar.min, calendar.sec);
     LED_TogglePin(GPIOB, GPIO_PIN_5);
-    LED_TogglePin(GPIOE, GPIO_PIN_5);
     HAL_Delay(500);
     /* USER CODE END WHILE */
 
