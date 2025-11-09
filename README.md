@@ -4,7 +4,7 @@
 - 开发板使用正点原子的STM32F03ZET6精英开发板
 
 ### LED
-LED跑马灯
+配置LED和UASRT
 #### 硬件资源
 1. LED 灯
   - PB5引脚接LED0（对应板上灯DS0）
