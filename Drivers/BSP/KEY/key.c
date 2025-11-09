@@ -1,61 +1,61 @@
 //
-// Created by fcant on 2025/8/27 ĞÇÆÚÈı.
+// Created by fcant on 2025/8/27 æ˜ŸæœŸä¸‰.
 //
 #include "key.h"
 
 /**
-* @brief °´¼ü³õÊ¼»¯º¯Êı
-* @param ÎŞ
-* @retval ÎŞ
+* @brief æŒ‰é”®åˆå§‹åŒ–å‡½æ•°
+* @param æ— 
+* @retval æ— 
 */
 void KEY_INIT(void) {
-    GPIO_InitTypeDef GPIO_InitStruct = {0}; /* GPIO ÅäÖÃ²ÎÊı´æ´¢±äÁ¿ */
-    KEY0_GPIO_CLK_ENABLE(); /* KEY0 Ê±ÖÓÊ¹ÄÜ */
-    KEY1_GPIO_CLK_ENABLE(); /* KEY1 Ê±ÖÓÊ¹ÄÜ */
-    WKUP_GPIO_CLK_ENABLE(); /* WKUP Ê±ÖÓÊ¹ÄÜ */
-    GPIO_InitStruct.Pin = KEY0_GPIO_PIN; /* KEY0 Òı½Å */
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT; /* ÊäÈë */
-    GPIO_InitStruct.Pull = GPIO_PULLUP; /* ÉÏÀ­ */
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; /* ¸ßËÙ */
-    HAL_GPIO_Init(KEY0_GPIO_PORT, &GPIO_InitStruct); /* KEY0 Òı½ÅÄ£Ê½ÉèÖÃ */
-    GPIO_InitStruct.Pin = KEY1_GPIO_PIN; /* KEY1 Òı½Å */
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT; /* ÊäÈë */
-    GPIO_InitStruct.Pull = GPIO_PULLUP; /* ÉÏÀ­ */
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; /* ¸ßËÙ */
-    HAL_GPIO_Init(KEY1_GPIO_PORT, &GPIO_InitStruct); /* KEY1 Òı½ÅÄ£Ê½ÉèÖÃ */
-    GPIO_InitStruct.Pin = WKUP_GPIO_PIN; /* WKUP Òı½Å */
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT; /* ÊäÈë */
-    GPIO_InitStruct.Pull = GPIO_PULLDOWN; /* ÏÂÀ­ */
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; /* ¸ßËÙ */
-    HAL_GPIO_Init(WKUP_GPIO_PORT, &GPIO_InitStruct); /* WKUP Òı½ÅÄ£Ê½ÉèÖÃ */
+    GPIO_InitTypeDef GPIO_InitStruct = {0}; /* GPIO é…ç½®å‚æ•°å­˜å‚¨å˜é‡ */
+    KEY0_GPIO_CLK_ENABLE(); /* KEY0 æ—¶é’Ÿä½¿èƒ½ */
+    KEY1_GPIO_CLK_ENABLE(); /* KEY1 æ—¶é’Ÿä½¿èƒ½ */
+    WKUP_GPIO_CLK_ENABLE(); /* WKUP æ—¶é’Ÿä½¿èƒ½ */
+    GPIO_InitStruct.Pin = KEY0_GPIO_PIN; /* KEY0 å¼•è„š */
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT; /* è¾“å…¥ */
+    GPIO_InitStruct.Pull = GPIO_PULLUP; /* ä¸Šæ‹‰ */
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; /* é«˜é€Ÿ */
+    HAL_GPIO_Init(KEY0_GPIO_PORT, &GPIO_InitStruct); /* KEY0 å¼•è„šæ¨¡å¼è®¾ç½® */
+    GPIO_InitStruct.Pin = KEY1_GPIO_PIN; /* KEY1 å¼•è„š */
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT; /* è¾“å…¥ */
+    GPIO_InitStruct.Pull = GPIO_PULLUP; /* ä¸Šæ‹‰ */
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; /* é«˜é€Ÿ */
+    HAL_GPIO_Init(KEY1_GPIO_PORT, &GPIO_InitStruct); /* KEY1 å¼•è„šæ¨¡å¼è®¾ç½® */
+    GPIO_InitStruct.Pin = WKUP_GPIO_PIN; /* WKUP å¼•è„š */
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT; /* è¾“å…¥ */
+    GPIO_InitStruct.Pull = GPIO_PULLDOWN; /* ä¸‹æ‹‰ */
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; /* é«˜é€Ÿ */
+    HAL_GPIO_Init(WKUP_GPIO_PORT, &GPIO_InitStruct); /* WKUP å¼•è„šæ¨¡å¼è®¾ç½® */
 }
 
 /**
-* @brief °´¼üÉ¨Ãèº¯Êı
-* @note ¸Ãº¯ÊıÓĞÏìÓ¦ÓÅÏÈ¼¶(Í¬Ê±°´ÏÂ¶à¸ö°´¼ü): WK_UP > KEY1 > KEY0!!
-* @param mode:0 / 1, ¾ßÌåº¬ÒåÈçÏÂ:
-* @arg 0, ²»Ö§³ÖÁ¬Ğø°´(µ±°´¼ü°´ÏÂ²»·ÅÊ±, Ö»ÓĞµÚÒ»´Îµ÷ÓÃ»á·µ»Ø¼üÖµ,
-* ±ØĞëËÉ¿ªÒÔºó, ÔÙ´Î°´ÏÂ²Å»á·µ»ØÆäËû¼üÖµ)
-* @arg 1, Ö§³ÖÁ¬Ğø°´(µ±°´¼ü°´ÏÂ²»·ÅÊ±, Ã¿´Îµ÷ÓÃ¸Ãº¯Êı¶¼»á·µ»Ø¼üÖµ)
-* @retval ¼üÖµ, ¶¨ÒåÈçÏÂ:
-* KEY0_PRES, 1, KEY0 °´ÏÂ
-* KEY1_PRES, 2, KEY1 °´ÏÂ
-* WKUP_PRES, 3, WKUP °´ÏÂ
+* @brief æŒ‰é”®æ‰«æå‡½æ•°
+* @note è¯¥å‡½æ•°æœ‰å“åº”ä¼˜å…ˆçº§(åŒæ—¶æŒ‰ä¸‹å¤šä¸ªæŒ‰é”®): WK_UP > KEY1 > KEY0!!
+* @param mode:0 / 1, å…·ä½“å«ä¹‰å¦‚ä¸‹:
+* @arg 0, ä¸æ”¯æŒè¿ç»­æŒ‰(å½“æŒ‰é”®æŒ‰ä¸‹ä¸æ”¾æ—¶, åªæœ‰ç¬¬ä¸€æ¬¡è°ƒç”¨ä¼šè¿”å›é”®å€¼,
+* å¿…é¡»æ¾å¼€ä»¥å, å†æ¬¡æŒ‰ä¸‹æ‰ä¼šè¿”å›å…¶ä»–é”®å€¼)
+* @arg 1, æ”¯æŒè¿ç»­æŒ‰(å½“æŒ‰é”®æŒ‰ä¸‹ä¸æ”¾æ—¶, æ¯æ¬¡è°ƒç”¨è¯¥å‡½æ•°éƒ½ä¼šè¿”å›é”®å€¼)
+* @retval é”®å€¼, å®šä¹‰å¦‚ä¸‹:
+* KEY0_PRES, 1, KEY0 æŒ‰ä¸‹
+* KEY1_PRES, 2, KEY1 æŒ‰ä¸‹
+* WKUP_PRES, 3, WKUP æŒ‰ä¸‹
 */
 uint8_t KEY_SCAN(uint8_t mode) {
-    static uint8_t key_up = 1; /* °´¼ü°´ËÉ¿ª±êÖ¾ */
+    static uint8_t key_up = 1; /* æŒ‰é”®æŒ‰æ¾å¼€æ ‡å¿— */
     uint8_t keyval = 0;
-    if (mode) key_up = 1; /* Ö§³ÖÁ¬°´ */
+    if (mode) key_up = 1; /* æ”¯æŒè¿æŒ‰ */
     if (key_up && (KEY0 == 0 || KEY1 == 0 || WK_UP == 1)) {
-        /* °´¼üËÉ¿ª±êÖ¾Îª 1, ÇÒÓĞÈÎÒâÒ»¸ö°´¼ü°´ÏÂÁË */
-        HAL_Delay(10); /* È¥¶¶¶¯ */
+        /* æŒ‰é”®æ¾å¼€æ ‡å¿—ä¸º 1, ä¸”æœ‰ä»»æ„ä¸€ä¸ªæŒ‰é”®æŒ‰ä¸‹äº† */
+        HAL_Delay(10); /* å»æŠ–åŠ¨ */
         key_up = 0;
         if (KEY0 == 0) keyval = KEY0_PRES;
         if (KEY1 == 0) keyval = KEY1_PRES;
         if (WK_UP == 1) keyval = WKUP_PRES;
     } else if (KEY0 == 1 && KEY1 == 1 && WK_UP == 0) {
-        /* Ã»ÓĞÈÎºÎ°´¼ü°´ÏÂ, ±ê¼Ç°´¼üËÉ¿ª */
+        /* æ²¡æœ‰ä»»ä½•æŒ‰é”®æŒ‰ä¸‹, æ ‡è®°æŒ‰é”®æ¾å¼€ */
         key_up = 1;
     }
-    return keyval; /* ·µ»Ø¼üÖµ */
+    return keyval; /* è¿”å›é”®å€¼ */
 }
