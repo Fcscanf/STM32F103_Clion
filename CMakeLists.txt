@@ -39,7 +39,9 @@ add_executable(${CMAKE_PROJECT_NAME}
         Drivers/BSP/LED/led.h
         Drivers/BSP/LED/led.c
         Drivers/BSP/KEY/key.c
-        Drivers/SYSTEM/USART/usart.c)
+        Drivers/SYSTEM/USART/usart.c
+        Drivers/BSP/DMA/dma.h
+        Drivers/BSP/DMA/dma.c)
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
