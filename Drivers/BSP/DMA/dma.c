@@ -1,51 +1,51 @@
 //
-// Created by fcant on 2025/11/10 ĞÇÆÚÒ».
+// Created by fcant on 2025/11/10 æ˜ŸæœŸä¸€.
 //
 #include "dma.h"
 #include <stdio.h>
 
 #include "../../BSP/KEY/key.h"
 
-DMA_HandleTypeDef g_dma_handle = {0}; /* DMA¾ä±ú */
-extern UART_HandleTypeDef huart1; /* UART¾ä±ú */
+DMA_HandleTypeDef g_dma_handle = {0}; /* DMAå¥æŸ„ */
+extern UART_HandleTypeDef huart1; /* UARTå¥æŸ„ */
 
 /**
- * @brief       ´®¿ÚTX DMA³õÊ¼»¯º¯Êı
- *   @note      ÕâÀïµÄ´«ÊäĞÎÊ½ÊÇ¹Ì¶¨µÄ, ÕâµãÒª¸ù¾İ²»Í¬µÄÇé¿öÀ´ĞŞ¸Ä
- *              ´Ó´æ´¢Æ÷ -> ÍâÉèÄ£Ê½/8Î»Êı¾İ¿í¶È/´æ´¢Æ÷ÔöÁ¿Ä£Ê½
+ * @brief       ä¸²å£TX DMAåˆå§‹åŒ–å‡½æ•°
+ *   @note      è¿™é‡Œçš„ä¼ è¾“å½¢å¼æ˜¯å›ºå®šçš„, è¿™ç‚¹è¦æ ¹æ®ä¸åŒçš„æƒ…å†µæ¥ä¿®æ”¹
+ *              ä»å­˜å‚¨å™¨ -> å¤–è®¾æ¨¡å¼/8ä½æ•°æ®å®½åº¦/å­˜å‚¨å™¨å¢é‡æ¨¡å¼
  *
- * @param       dmax_chy    : DMAµÄÍ¨µÀ, DMA1_Channel1 ~ DMA1_Channel7, DMA2_Channel1 ~ DMA2_Channel5
- *                            Ä³¸öÍâÉè¶ÔÓ¦ÄÄ¸öDMA, ÄÄ¸öÍ¨µÀ, Çë²Î¿¼<<STM32ÖĞÎÄ²Î¿¼ÊÖ²á V10>> 10.3.7½Ú
- *                            ±ØĞëÉèÖÃÕıÈ·µÄDMA¼°Í¨µÀ, ²ÅÄÜÕı³£Ê¹ÓÃ!
- * @retval      ÎŞ
+ * @param       dmax_chy    : DMAçš„é€šé“, DMA1_Channel1 ~ DMA1_Channel7, DMA2_Channel1 ~ DMA2_Channel5
+ *                            æŸä¸ªå¤–è®¾å¯¹åº”å“ªä¸ªDMA, å“ªä¸ªé€šé“, è¯·å‚è€ƒ<<STM32ä¸­æ–‡å‚è€ƒæ‰‹å†Œ V10>> 10.3.7èŠ‚
+ *                            å¿…é¡»è®¾ç½®æ­£ç¡®çš„DMAåŠé€šé“, æ‰èƒ½æ­£å¸¸ä½¿ç”¨!
+ * @retval      æ— 
  */
 void dma_init(DMA_Channel_TypeDef *DMAx_CHx) {
-    if ((uint32_t) DMAx_CHx > (uint32_t) DMA1_Channel7) /* ´óÓÚDMA1_Channel7, ÔòÎªDMA2µÄÍ¨µÀÁË */
+    if ((uint32_t) DMAx_CHx > (uint32_t) DMA1_Channel7) /* å¤§äºDMA1_Channel7, åˆ™ä¸ºDMA2çš„é€šé“äº† */
     {
-        __HAL_RCC_DMA2_CLK_ENABLE(); /* DMA2Ê±ÖÓÊ¹ÄÜ */
+        __HAL_RCC_DMA2_CLK_ENABLE(); /* DMA2æ—¶é’Ÿä½¿èƒ½ */
     } else {
-        __HAL_RCC_DMA1_CLK_ENABLE(); /* DMA1Ê±ÖÓÊ¹ÄÜ */
+        __HAL_RCC_DMA1_CLK_ENABLE(); /* DMA1æ—¶é’Ÿä½¿èƒ½ */
     }
 
-    __HAL_LINKDMA(&huart1, hdmatx, g_dma_handle); /* ½«DMAÓëUSART1ÁªÏµÆğÀ´(·¢ËÍDMA) */
+    __HAL_LINKDMA(&huart1, hdmatx, g_dma_handle); /* å°†DMAä¸USART1è”ç³»èµ·æ¥(å‘é€DMA) */
 
-    /* Tx DMAÅäÖÃ */
-    g_dma_handle.Instance = DMAx_CHx; /* USART1_TXÊ¹ÓÃµÄDMAÍ¨µÀÎª: DMA1_Channel4 */
-    g_dma_handle.Init.Direction = DMA_MEMORY_TO_PERIPH; /* DIR = 1 , ´æ´¢Æ÷µ½ÍâÉèÄ£Ê½ */
-    g_dma_handle.Init.PeriphInc = DMA_PINC_DISABLE; /* ÍâÉè·ÇÔöÁ¿Ä£Ê½ */
-    g_dma_handle.Init.MemInc = DMA_MINC_ENABLE; /* ´æ´¢Æ÷ÔöÁ¿Ä£Ê½ */
-    g_dma_handle.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE; /* ÍâÉèÊı¾İ³¤¶È:8Î» */
-    g_dma_handle.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE; /* ´æ´¢Æ÷Êı¾İ³¤¶È:8Î» */
-    g_dma_handle.Init.Mode = DMA_NORMAL; /* ÍâÉèÁ÷¿ØÄ£Ê½ */
-    g_dma_handle.Init.Priority = DMA_PRIORITY_MEDIUM; /* ÖĞµÈÓÅÏÈ¼¶ */
+    /* Tx DMAé…ç½® */
+    g_dma_handle.Instance = DMAx_CHx; /* USART1_TXä½¿ç”¨çš„DMAé€šé“ä¸º: DMA1_Channel4 */
+    g_dma_handle.Init.Direction = DMA_MEMORY_TO_PERIPH; /* DIR = 1 , å­˜å‚¨å™¨åˆ°å¤–è®¾æ¨¡å¼ */
+    g_dma_handle.Init.PeriphInc = DMA_PINC_DISABLE; /* å¤–è®¾éå¢é‡æ¨¡å¼ */
+    g_dma_handle.Init.MemInc = DMA_MINC_ENABLE; /* å­˜å‚¨å™¨å¢é‡æ¨¡å¼ */
+    g_dma_handle.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE; /* å¤–è®¾æ•°æ®é•¿åº¦:8ä½ */
+    g_dma_handle.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE; /* å­˜å‚¨å™¨æ•°æ®é•¿åº¦:8ä½ */
+    g_dma_handle.Init.Mode = DMA_NORMAL; /* å¤–è®¾æµæ§æ¨¡å¼ */
+    g_dma_handle.Init.Priority = DMA_PRIORITY_MEDIUM; /* ä¸­ç­‰ä¼˜å…ˆçº§ */
 
     HAL_DMA_Init(&g_dma_handle);
 }
 
-const uint8_t TEXT_TO_SEND[] = {"STM32 DMA UART Transmit Test"}; /* ÒªÑ­»··¢ËÍµÄ×Ö·û´® */
-#define SEND_BUF_SIZE       (sizeof(TEXT_TO_SEND) + 2) * 200    /* ·¢ËÍÊı¾İ³¤¶È, µÈÓÚsizeof(TEXT_TO_SEND) + 2µÄ200±¶. */
+const uint8_t TEXT_TO_SEND[] = {"STM32 DMA UART Transmit Test"}; /* è¦å¾ªç¯å‘é€çš„å­—ç¬¦ä¸² */
+#define SEND_BUF_SIZE       (sizeof(TEXT_TO_SEND) + 2) * 200    /* å‘é€æ•°æ®é•¿åº¦, ç­‰äºsizeof(TEXT_TO_SEND) + 2çš„200å€. */
 
-uint8_t g_sendbuf[SEND_BUF_SIZE]; /* ·¢ËÍÊı¾İ»º³åÇø */
+uint8_t g_sendbuf[SEND_BUF_SIZE]; /* å‘é€æ•°æ®ç¼“å†²åŒº */
 uint16_t i, k;
 uint16_t len;
 uint8_t mask = 0;
@@ -54,9 +54,9 @@ void data_init(void) {
     len = sizeof(TEXT_TO_SEND);
     k = 0;
 
-    for (i = 0; i < SEND_BUF_SIZE; i++) /* Ìî³äASCII×Ö·û¼¯Êı¾İ */
+    for (i = 0; i < SEND_BUF_SIZE; i++) /* å¡«å……ASCIIå­—ç¬¦é›†æ•°æ® */
     {
-        if (k >= len) /* Èë»»ĞĞ·û */
+        if (k >= len) /* å…¥æ¢è¡Œç¬¦ */
         {
             if (mask) {
                 g_sendbuf[i] = 0x0a;
@@ -65,7 +65,7 @@ void data_init(void) {
                 g_sendbuf[i] = 0x0d;
                 mask++;
             }
-        } else /* ¸´ÖÆTEXT_TO_SENDÓï¾ä */
+        } else /* å¤åˆ¶TEXT_TO_SENDè¯­å¥ */
         {
             mask = 0;
             g_sendbuf[i] = TEXT_TO_SEND[k];
@@ -75,33 +75,33 @@ void data_init(void) {
 }
 
 uint8_t key = 0;
-float pro = 0; /* ½ø¶È */
+float pro = 0; /* è¿›åº¦ */
 void dma_transmit(void) {
     key = KEY_SCAN(0);
-    if (key == KEY0_PRES) /* KEY0°´ÏÂ */
+    if (key == KEY0_PRES) /* KEY0æŒ‰ä¸‹ */
     {
         printf("DMA DATA:\r\n");
         printf("Start Transmit ....\r\n");
 
         HAL_UART_Transmit_DMA(&huart1, g_sendbuf, SEND_BUF_SIZE);
-        /* µÈ´ıDMA´«ÊäÍê³É£¬´ËÊ±À´×öÁíÍâÒ»Ğ©ÊÂÇé£¬±ÈÈçµãµÆ
-         * Êµ¼ÊÓ¦ÓÃÖĞ£¬´«ÊäÊı¾İÆÚ¼ä£¬¿ÉÒÔÖ´ĞĞÁíÍâµÄÈÎÎñ
+        /* ç­‰å¾…DMAä¼ è¾“å®Œæˆï¼Œæ­¤æ—¶æ¥åšå¦å¤–ä¸€äº›äº‹æƒ…ï¼Œæ¯”å¦‚ç‚¹ç¯
+         * å®é™…åº”ç”¨ä¸­ï¼Œä¼ è¾“æ•°æ®æœŸé—´ï¼Œå¯ä»¥æ‰§è¡Œå¦å¤–çš„ä»»åŠ¡
          */
         while (1) {
-            if (__HAL_DMA_GET_FLAG(&g_dma_handle, DMA_FLAG_TC4)) /* µÈ´ı DMA1_Channel4 ´«ÊäÍê³É */
+            if (__HAL_DMA_GET_FLAG(&g_dma_handle, DMA_FLAG_TC4)) /* ç­‰å¾… DMA1_Channel4 ä¼ è¾“å®Œæˆ */
             {
                 __HAL_DMA_CLEAR_FLAG(&g_dma_handle, DMA_FLAG_TC4);
-                HAL_UART_DMAStop(&huart1); /* ´«ÊäÍê³ÉÒÔºó¹Ø±Õ´®¿ÚDMA */
+                HAL_UART_DMAStop(&huart1); /* ä¼ è¾“å®Œæˆä»¥åå…³é—­ä¸²å£DMA */
                 break;
             }
 
-            pro = DMA1_Channel4->CNDTR; /* µÃµ½µ±Ç°»¹Ê£Óà¶àÉÙ¸öÊı¾İ */
-            len = SEND_BUF_SIZE; /* ×Ü³¤¶È */
-            pro = 1 - (pro / len); /* µÃµ½°Ù·Ö±È */
-            pro *= 100; /* À©´ó100±¶ */
+            pro = DMA1_Channel4->CNDTR; /* å¾—åˆ°å½“å‰è¿˜å‰©ä½™å¤šå°‘ä¸ªæ•°æ® */
+            len = SEND_BUF_SIZE; /* æ€»é•¿åº¦ */
+            pro = 1 - (pro / len); /* å¾—åˆ°ç™¾åˆ†æ¯” */
+            pro *= 100; /* æ‰©å¤§100å€ */
             // printf("transmit %.2f%%\r\n", pro);
         }
-        printf("transmit 100%%\r\n"); /* ÏÔÊ¾100% */
-        printf("Transmit Finished!\r\n"); /* ÌáÊ¾´«ËÍÍê³É */
+        printf("transmit 100%%\r\n"); /* æ˜¾ç¤º100% */
+        printf("Transmit Finished!\r\n"); /* æç¤ºä¼ é€å®Œæˆ */
     }
 }
