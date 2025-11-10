@@ -18,7 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "../../SYSTEM/USART/usart.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -86,6 +86,7 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   LED_INIT();
+  USART1_UART_Init(115200);
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -95,7 +96,6 @@ int main(void)
   while (1)
   {
     LED_TogglePin(GPIOB, GPIO_PIN_5);
-    LED_TogglePin(GPIOE, GPIO_PIN_5);
     HAL_Delay(500);
     /* USER CODE END WHILE */
 
