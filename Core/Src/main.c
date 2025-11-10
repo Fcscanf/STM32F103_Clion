@@ -18,7 +18,11 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+
+#include <stdio.h>
+
 #include "../../SYSTEM/USART/usart.h"
+#include "../../BSP/ADC/adc.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -87,14 +91,16 @@ int main(void)
   GPIO_Init();
   LED_INIT();
   USART1_UART_Init(115200);
+  adc_init();
   /* USER CODE BEGIN 2 */
-
+  printf("STM32 ADC TEST\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    show();
     LED_TogglePin(GPIOB, GPIO_PIN_5);
     HAL_Delay(500);
     /* USER CODE END WHILE */
