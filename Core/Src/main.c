@@ -91,9 +91,9 @@ int main(void)
   LED_INIT();
   USART1_UART_Init(115200);
   KEY_INIT();
-  dma_init();
+  dma_init(DMA1_Channel4);            /* 初始化串口1 TX DMA */
   /* USER CODE BEGIN 2 */
-
+  data_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */

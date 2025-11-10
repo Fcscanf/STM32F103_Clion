@@ -8,6 +8,8 @@
 
 #define USART_REC_LEN 200
 
+extern UART_HandleTypeDef huart1;
+
 void USART1_UART_Init(uint32_t baudrate);
 void USART1_FeedBack(void);
 
