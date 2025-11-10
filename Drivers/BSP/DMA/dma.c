@@ -1,5 +1,5 @@
 //
-// Created by fcant on 2025/11/10 ĞÇÆÚÒ».
+// Created by fcant on 2025/11/10 æ˜ŸæœŸä¸€.
 //
 #include "dma.h"
 #include <stdio.h>
@@ -13,24 +13,24 @@ DMA_HandleTypeDef g_dma_handler = {0};
 uint8_t src_buf[10] = {0x0a, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09};
 uint8_t dest_buf[10] = {0};
 
-/* ÄÚ´æµ½ÄÚ´æ DMA´«Êä */
+/* å†…å­˜åˆ°å†…å­˜ DMAä¼ è¾“ */
 void dma_init(void) {
-    /* Ê¹ÄÜDMA1Ê±ÖÓ */
+    /* ä½¿èƒ½DMA1æ—¶é’Ÿ */
     __HAL_RCC_DMA1_CLK_ENABLE();
 
     g_dma_handler.Instance = DMA1_Channel1;
     g_dma_handler.Init.Direction = DMA_MEMORY_TO_MEMORY;
 
-    /* ÓëÄ¿±êµØÖ·Ïà¹Ø */
+    /* ä¸ç›®æ ‡åœ°å€ç›¸å…³ */
     g_dma_handler.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
     g_dma_handler.Init.MemInc = DMA_MINC_ENABLE;
 
-    /* ÓëÔ´µØÖ·Ïà¹Ø */
+    /* ä¸æºåœ°å€ç›¸å…³ */
     g_dma_handler.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
     g_dma_handler.Init.PeriphInc = DMA_PINC_ENABLE;
 
     g_dma_handler.Init.Priority = DMA_PRIORITY_HIGH;
-    g_dma_handler.Init.Mode = DMA_NORMAL; /* ÄÚ´æµ½ÄÚ´æÊÇ²»Ö§³ÖÑ­»·Ä£Ê½ */
+    g_dma_handler.Init.Mode = DMA_NORMAL; /* å†…å­˜åˆ°å†…å­˜æ˜¯ä¸æ”¯æŒå¾ªç¯æ¨¡å¼ */
 
     HAL_DMA_Init(&g_dma_handler);
     HAL_DMA_Start(&g_dma_handler, (uint32_t) src_buf, (uint32_t) dest_buf, 0);
@@ -47,7 +47,7 @@ void dma_enable_transmit(uint16_t cndtr) {
 
 uint8_t key;
 void dma_transmit(void) {
-    key = KEY_SCAN(0); /* µÃµ½¼üÖµ */
+    key = KEY_SCAN(0); /* å¾—åˆ°é”®å€¼ */
 
     if (key == KEY0_PRES) {
         memset(dest_buf, 0, 10);
@@ -56,7 +56,7 @@ void dma_transmit(void) {
         while (1) {
             if (__HAL_DMA_GET_FLAG(&g_dma_handler, DMA_FLAG_TC1)) {
                 __HAL_DMA_CLEAR_FLAG(&g_dma_handler, DMA_FLAG_TC1);
-                printf("´«ÊäÍê³É \r\n");
+                printf("ä¼ è¾“å®Œæˆ \r\n");
                 break;
             }
         }
