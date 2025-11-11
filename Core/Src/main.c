@@ -91,16 +91,16 @@ int main(void)
   GPIO_Init();
   LED_INIT();
   USART1_UART_Init(115200);
-  adc_init();
+  adc3_init();
   /* USER CODE BEGIN 2 */
-  printf("STM32 ADC TEST\r\n");
+  printf("STM32 ADC LSENS TEST\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    show();
+    show_lsens();
     LED_TogglePin(GPIOB, GPIO_PIN_5);
     HAL_Delay(500);
     /* USER CODE END WHILE */
