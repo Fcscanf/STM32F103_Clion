@@ -136,7 +136,7 @@ void show(void) {
         temp -= adcx; /* 把已经显示的整数部分去掉，留下小数部分，比如3.1111-3=0.1111 */
         temp *= 1000; /* 小数部分乘以1000，例如：0.1111就转换为111.1，相当于保留三位小数。 */
         // lcd_show_xnum(150, 130, temp, 3, 16, 0X80, BLUE);   /* 显示小数部分（前面转换为了整形显示），这里显示的就是111. */
-        printf(".%d\r\n", temp);
+        printf(".%d\r\n", (uint16_t)temp);
 
         g_adc_dma_sta = 0; /* 清除DMA采集完成状态标志 */
         adc_dma_enable(); /* 启动下一次ADC DMA采集 */
