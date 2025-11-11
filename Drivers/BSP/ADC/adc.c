@@ -146,17 +146,17 @@ void show(void) {
 
             /* 显示结果 */
             // lcd_show_xnum(108, 110 + (j * 30), adcx, 4, 12, 0, BLUE);   /* 显示ADC采样后的原始值 */
-            printf("S CH%d: %d\r\n", j+1, adcx);
+            printf("S CH%d: %d\r\n", j, adcx);
 
             temp = (float) adcx * (3.3 / 4096); /* 获取计算后的带小数的实际电压值，比如3.1111 */
             adcx = temp; /* 赋值整数部分给adcx变量，因为adcx为u16整形 */
             // lcd_show_xnum(108, 122 + (j * 30), adcx, 1, 12, 0, BLUE);   /* 显示电压值的整数部分，3.1111的话，这里就是显示3 */
-            printf("V CH%d: %d", j+1, adcx);
+            printf("V CH%d: %d", j, adcx);
 
             temp -= adcx; /* 把已经显示的整数部分去掉，留下小数部分，比如3.1111-3=0.1111 */
             temp *= 1000; /* 小数部分乘以1000，例如：0.1111就转换为111.1，相当于保留三位小数。 */
             // lcd_show_xnum(120, 122 + (j * 30), temp, 3, 12, 0X80, BLUE);/* 显示小数部分（前面转换为了整形显示），这里显示的就是111. */
-            printf(".%d\r\n", temp);
+            printf(".%d\r\n", (uint16_t)temp);
         }
 
         g_adc_dma_sta = 0; /* 清除DMA采集完成状态标志 */
