@@ -7,7 +7,7 @@
 
 #include "stm32f1xx_hal.h"
 
-void adc_dma_init(void);
+void adc_nch_dma_init(void);
 void adc_dma_enable(void);
 void show(void);
 
