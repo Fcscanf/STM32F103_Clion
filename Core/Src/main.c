@@ -91,9 +91,10 @@ int main(void)
   GPIO_Init();
   LED_INIT();
   USART1_UART_Init(115200);
-  adc_init();
+  adc_dma_init(); /* 初始化ADC DMA采集 */
   /* USER CODE BEGIN 2 */
-  printf("STM32 ADC TEST\r\n");
+  printf("STM32 ADC DMA Read TEST\r\n");
+  adc_dma_enable();   /* 启动ADC DMA采集 */
   /* USER CODE END 2 */
 
   /* Infinite loop */

@@ -7,8 +7,8 @@
 
 #include "stm32f1xx_hal.h"
 
-void adc_init(void);
-uint32_t adc_get_result(void);
+void adc_dma_init(void);
+void adc_dma_enable(void);
 void show(void);
 
 #endif //STM32F103_CLION_ADC_H
