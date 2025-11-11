@@ -58,19 +58,20 @@ uint32_t adc_get_result(void) {
 
 uint16_t adcx;
 float temp;
+
 void show(void) {
     adcx = adc_get_result();
     // lcd_show_xnum(134, 110, adcx, 5, 16, 0, BLUE);  /* 显示ADCC采样后的原始值 */
     printf("S: %d\r\n", adcx);
 
-    temp = (float)adcx * (3.3 / 4096);              /* 获取计算后的带小数的实际电压值，比如3.1111 */
+    temp = (float) adcx * (3.3 / 4096); /* 获取计算后的带小数的实际电压值，比如3.1111 */
 
-    adcx = temp;                                    /* 赋值整数部分给adcx变量，因为adcx为u16整形 */
+    adcx = temp; /* 赋值整数部分给adcx变量，因为adcx为u16整形 */
     // lcd_show_xnum(134, 130, adcx, 1, 16, 0, BLUE);  /* 显示电压值的整数部分，3.1111的话，这里就是显示3 */
     printf("V: %d", adcx);
 
-    temp -= adcx;                                   /* 把已经显示的整数部分去掉，留下小数部分，比如3.1111-3=0.1111 */
-    temp *= 1000;                                   /* 小数部分乘以1000，例如：0.1111就转换为111.1，相当于保留三位小数。 */
+    temp -= adcx; /* 把已经显示的整数部分去掉，留下小数部分，比如3.1111-3=0.1111 */
+    temp *= 1000; /* 小数部分乘以1000，例如：0.1111就转换为111.1，相当于保留三位小数。 */
     // lcd_show_xnum(150, 130, temp, 3, 16, 0X80, BLUE);/* 显示小数部分（前面转换为了整形显示），这里显示的就是111. */
-    printf(".%d\r\n", (uint16_t)temp);
+    printf(".%d\r\n", (uint16_t) temp);
 }
