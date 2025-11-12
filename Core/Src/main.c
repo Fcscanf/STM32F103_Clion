@@ -23,6 +23,7 @@
 
 #include "../../SYSTEM/USART/usart.h"
 #include "../../BSP/ADC/adc.h"
+#include "../../BSP/DAC/dac.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -92,8 +93,10 @@ int main(void)
   LED_INIT();
   USART1_UART_Init(115200);
   adc_init();
+  dac_init();
   /* USER CODE BEGIN 2 */
-  printf("STM32 ADC TEST\r\n");
+  printf("STM32 DAC TEST\r\n");
+  dac_set_voltage(3000);
   /* USER CODE END 2 */
 
   /* Infinite loop */
