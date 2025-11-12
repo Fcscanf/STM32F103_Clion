@@ -95,17 +95,17 @@ int main(void)
   KEY_INIT();
   USART1_UART_Init(115200);
   adc_init();
-  dac_dma_wave_init();
+  pwmdac_init(256 - 1, 0);
   /* USER CODE BEGIN 2 */
-  printf("STM32 DAC DMA Sin WAVE TEST\r\n");
-  printf("KEY0:3Khz  KEY1:30Khz\r\n");
+  printf("STM32 DAC PWM TEST\r\n");
+  pwmdac_set_voltage(2800);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    dac_sin_wave_by_key();
+    show();
     LED_TogglePin(GPIOB, GPIO_PIN_5);
     HAL_Delay(500);
     /* USER CODE END WHILE */

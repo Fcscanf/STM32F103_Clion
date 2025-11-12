@@ -56,15 +56,12 @@ uint32_t adc_get_result(void) {
     return (uint16_t) HAL_ADC_GetValue(&g_adc_handle);
 }
 
-uint16_t adcx;
-float temp;
-
 void show(void) {
-    adcx = adc_get_result();
+    uint16_t adcx = adc_get_result();
     // lcd_show_xnum(134, 110, adcx, 5, 16, 0, BLUE);  /* 显示ADCC采样后的原始值 */
     printf("S: %d\r\n", adcx);
 
-    temp = (float) adcx * (3.3 / 4096); /* 获取计算后的带小数的实际电压值，比如3.1111 */
+    float temp = (float) adcx * (3.3 / 4096); /* 获取计算后的带小数的实际电压值，比如3.1111 */
 
     adcx = temp; /* 赋值整数部分给adcx变量，因为adcx为u16整形 */
     // lcd_show_xnum(134, 130, adcx, 1, 16, 0, BLUE);  /* 显示电压值的整数部分，3.1111的话，这里就是显示3 */

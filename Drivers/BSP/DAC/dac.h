@@ -7,8 +7,7 @@
 
 #include "stm32f1xx_hal.h"
 
-void dac_dma_wave_init(void);
-// void dac_dma_wave_enable(uint16_t cndtr, uint16_t arr, uint16_t psc);
-void dac_sin_wave_by_key(void);
+void pwmdac_init(uint16_t arr, uint16_t psc);
+void pwmdac_set_voltage(uint16_t vol);
 
 #endif //STM32F103_CLION_DAC_H
