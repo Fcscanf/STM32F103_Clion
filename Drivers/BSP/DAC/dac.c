@@ -4,6 +4,10 @@
 
 #include "dac.h"
 
+#include <stdio.h>
+
+#include "../KEY/key.h"
+
 DAC_HandleTypeDef g_dac_handle;
 
 /* DAC初始化函数 */
@@ -34,13 +38,57 @@ void HAL_DAC_MspInit(DAC_HandleTypeDef *hdac) {
     }
 }
 
-/* 设置通道输出电压 */
-void dac_set_voltage(uint16_t vol) {
-    double temp = vol;
-    temp /= 1000;
-    temp = temp * 4096 / 3.3;
+/**
+ * @brief       设置DAC_OUT1输出三角波
+ *   @note      输出频率 ≈ 1000 / (dt * samples) Khz, 不过在dt较小的时候,比如小于5us时, 由于delay_us
+ *              本身就不准了(调用函数,计算等都需要时间,延时很小的时候,这些时间会影响到延时), 频率会偏小.
+ *
+ * @param       maxval : 最大值(0 < maxval < 4096), (maxval + 1)必须大于等于samples/2
+ * @param       dt     : 每个采样点的延时时间(单位: us)
+ * @param       samples: 采样点的个数, samples必须小于等于(maxval + 1) * 2 , 且maxval不能等于0
+ * @param       n      : 输出波形个数,0~65535
+ *
+ * @retval      无
+ */
+void dac_triangular_wave(uint16_t maxval, uint16_t dt, uint16_t samples, uint16_t n) {
+    uint16_t i, j;
+    float incval; /* 递增量 */
+    float Curval; /* 当前值 */
 
-    if (temp >= 4096)temp = 4095; /* 如果值大于等于4096, 则取4095 */
+    if (samples > ((maxval + 1) * 2))return; /* 数据不合法 */
 
-    HAL_DAC_SetValue(&g_dac_handle, DAC_CHANNEL_1, DAC_ALIGN_12B_R, temp); /* 12位右对齐数据格式设置DAC值 */
+    incval = (maxval + 1) / (samples / 2); /* 计算递增量 */
+
+    for (j = 0; j < n; j++) {
+        Curval = 0;
+        HAL_DAC_SetValue(&g_dac_handle, DAC_CHANNEL_1, DAC_ALIGN_12B_R, Curval); /* 先输出0 */
+        for (i = 0; i < (samples / 2); i++) /* 输出上升沿 */
+        {
+            Curval += incval; /* 新的输出值 */
+            HAL_DAC_SetValue(&g_dac_handle, DAC_CHANNEL_1, DAC_ALIGN_12B_R, Curval);
+            HAL_Delay(dt);
+        }
+        for (i = 0; i < (samples / 2); i++) /* 输出下降沿 */
+        {
+            Curval -= incval; /* 新的输出值 */
+            HAL_DAC_SetValue(&g_dac_handle, DAC_CHANNEL_1, DAC_ALIGN_12B_R, Curval);
+            HAL_Delay(dt);
+        }
+    }
+}
+
+void dac_triangular_wave_by_key(void) {
+    uint8_t key = KEY_SCAN(0); /* 按键扫描 */
+
+    if (key == KEY0_PRES) /* 高采样率 , 100hz波形 ， 实际只有65.5hz */
+    {
+        printf("DAC Wave1");
+        dac_triangular_wave(4095, 5, 2000, 100); /* 幅值4095, 采样点间隔5us, 2000个采样点, 100个波形 */
+        printf("DAC None");
+    } else if (key == KEY1_PRES) /* 低采样率 , 100hz波形 ， 实际99.5hz */
+    {
+        printf("DAC Wave2");
+        dac_triangular_wave(4095, 500, 20, 100); /* 幅值4095, 采样点间隔500us, 20个采样点, 100个波形 */
+        printf("DAC None");
+    }
 }

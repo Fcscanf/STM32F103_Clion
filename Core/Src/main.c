@@ -22,6 +22,7 @@
 #include <stdio.h>
 
 #include "../../SYSTEM/USART/usart.h"
+#include "../../BSP/KEY/key.h"
 #include "../../BSP/ADC/adc.h"
 #include "../../BSP/DAC/dac.h"
 /* Private includes ----------------------------------------------------------*/
@@ -91,19 +92,20 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   LED_INIT();
+  KEY_INIT();
   USART1_UART_Init(115200);
   adc_init();
   dac_init();
   /* USER CODE BEGIN 2 */
-  printf("STM32 DAC TEST\r\n");
-  dac_set_voltage(3000);
+  printf("STM32 DAC Triangular WAVE TEST\r\n");
+  printf("KEY0:Wave1  KEY1:Wave2\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    show();
+    dac_triangular_wave_by_key();
     LED_TogglePin(GPIOB, GPIO_PIN_5);
     HAL_Delay(500);
     /* USER CODE END WHILE */
