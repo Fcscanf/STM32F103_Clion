@@ -4,24 +4,40 @@
 
 #include "dac.h"
 
-#include <stdio.h>
+#include <math.h>
 
 #include "../KEY/key.h"
 
-DAC_HandleTypeDef g_dac_handle;
+DAC_HandleTypeDef g_dac_dma_handle = {0};
 
-/* DAC初始化函数 */
-void dac_init(void) {
-    DAC_ChannelConfTypeDef dac_ch_conf;
+uint16_t g_dac_sin_buf[4096]; /* 发送数据缓冲区 */
 
-    g_dac_handle.Instance = DAC;
-    HAL_DAC_Init(&g_dac_handle); /* 初始化DAC */
+/* DAC DMA输出波形初始化函数 */
+void dac_dma_wave_init(void) {
+    __HAL_RCC_DMA2_CLK_ENABLE();
 
-    dac_ch_conf.DAC_Trigger = DAC_TRIGGER_NONE; /* 不使用触发功能 */
-    dac_ch_conf.DAC_OutputBuffer = DAC_OUTPUTBUFFER_DISABLE; /* DAC输出缓冲关闭 */
+    DMA_HandleTypeDef g_dma_dac_handle = {0};
+    g_dma_dac_handle.Instance = DMA2_Channel3;
+    g_dma_dac_handle.Init.Direction = DMA_MEMORY_TO_PERIPH;
+    g_dma_dac_handle.Init.PeriphInc = DMA_PINC_DISABLE;
+    g_dma_dac_handle.Init.MemInc = DMA_MINC_ENABLE;
+    g_dma_dac_handle.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+    g_dma_dac_handle.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+    g_dma_dac_handle.Init.Mode = DMA_CIRCULAR;
+    g_dma_dac_handle.Init.Priority = DMA_PRIORITY_MEDIUM;
+    HAL_DMA_Init(&g_dma_dac_handle);
 
-    HAL_DAC_ConfigChannel(&g_dac_handle, &dac_ch_conf, DAC_CHANNEL_1); /* 配置DAC通道1 */
-    HAL_DAC_Start(&g_dac_handle, DAC_CHANNEL_1); /* 开启DAC通道1 */
+    __HAL_LINKDMA(&g_dac_dma_handle, DMA_Handle1, g_dma_dac_handle);
+
+    g_dac_dma_handle.Instance = DAC;
+    HAL_DAC_Init(&g_dac_dma_handle);
+
+    DAC_ChannelConfTypeDef dac_ch_conf = {0};
+    dac_ch_conf.DAC_Trigger = DAC_TRIGGER_T7_TRGO;
+    dac_ch_conf.DAC_OutputBuffer = DAC_OUTPUTBUFFER_DISABLE;
+    HAL_DAC_ConfigChannel(&g_dac_dma_handle, &dac_ch_conf, DAC_CHANNEL_1);
+
+    HAL_DMA_Start(&g_dma_dac_handle, (uint32_t) g_dac_sin_buf, (uint32_t) &DAC1->DHR12R1, 0);
 }
 
 /* DAC MSP初始化函数 */
@@ -39,56 +55,74 @@ void HAL_DAC_MspInit(DAC_HandleTypeDef *hdac) {
 }
 
 /**
- * @brief       设置DAC_OUT1输出三角波
- *   @note      输出频率 ≈ 1000 / (dt * samples) Khz, 不过在dt较小的时候,比如小于5us时, 由于delay_us
- *              本身就不准了(调用函数,计算等都需要时间,延时很小的时候,这些时间会影响到延时), 频率会偏小.
+ * @brief       DAC DMA使能波形输出
+ *   @note      TIM7的输入时钟频率(f)来自APB1, f = 36M * 2 = 72Mhz.
+ *              DAC触发频率 ftrgo = f / ((psc + 1) * (arr + 1))
+ *              波形频率 = ftrgo / ndtr;
  *
- * @param       maxval : 最大值(0 < maxval < 4096), (maxval + 1)必须大于等于samples/2
- * @param       dt     : 每个采样点的延时时间(单位: us)
- * @param       samples: 采样点的个数, samples必须小于等于(maxval + 1) * 2 , 且maxval不能等于0
- * @param       n      : 输出波形个数,0~65535
- *
+ * @param       ndtr        : DMA通道单次传输数据量
+ * @param       arr         : TIM7的自动重装载值
+ * @param       psc         : TIM7的分频系数
  * @retval      无
  */
-void dac_triangular_wave(uint16_t maxval, uint16_t dt, uint16_t samples, uint16_t n) {
-    uint16_t i, j;
-    float incval; /* 递增量 */
-    float Curval; /* 当前值 */
+void dac_dma_wave_enable(uint16_t cndtr, uint16_t arr, uint16_t psc) {
+    __HAL_RCC_TIM7_CLK_ENABLE();
 
-    if (samples > ((maxval + 1) * 2))return; /* 数据不合法 */
+    TIM_HandleTypeDef tim7_handle = {0};
+    tim7_handle.Instance = TIM7;
+    tim7_handle.Init.Prescaler = psc;
+    tim7_handle.Init.Period = arr;
+    HAL_TIM_Base_Init(&tim7_handle);
 
-    incval = (maxval + 1) / (samples / 2); /* 计算递增量 */
+    TIM_MasterConfigTypeDef tim_mater_config = {0};
+    tim_mater_config.MasterOutputTrigger = TIM_TRGO_UPDATE;
+    tim_mater_config.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+    HAL_TIMEx_MasterConfigSynchronization(&tim7_handle, &tim_mater_config);
 
-    for (j = 0; j < n; j++) {
-        Curval = 0;
-        HAL_DAC_SetValue(&g_dac_handle, DAC_CHANNEL_1, DAC_ALIGN_12B_R, Curval); /* 先输出0 */
-        for (i = 0; i < (samples / 2); i++) /* 输出上升沿 */
-        {
-            Curval += incval; /* 新的输出值 */
-            HAL_DAC_SetValue(&g_dac_handle, DAC_CHANNEL_1, DAC_ALIGN_12B_R, Curval);
-            HAL_Delay(dt);
-        }
-        for (i = 0; i < (samples / 2); i++) /* 输出下降沿 */
-        {
-            Curval -= incval; /* 新的输出值 */
-            HAL_DAC_SetValue(&g_dac_handle, DAC_CHANNEL_1, DAC_ALIGN_12B_R, Curval);
-            HAL_Delay(dt);
-        }
+    HAL_TIM_Base_Start(&tim7_handle);
+
+    HAL_DAC_Stop_DMA(&g_dac_dma_handle, DAC_CHANNEL_1);
+    HAL_DAC_Start_DMA(&g_dac_dma_handle, DAC_CHANNEL_1, (uint32_t *) g_dac_sin_buf, cndtr, DAC_ALIGN_12B_R);
+}
+
+/**
+ * @brief       产生正弦波序列函数
+ *   @note      需保证: maxval > samples/2
+ * @param       maxval : 最大值(0 < maxval < 2048)
+ * @param       samples: 采样点的个数
+ * @retval      无
+ */
+void dac_creat_sin_buf(uint16_t maxval, uint16_t samples) {
+    uint8_t i;
+    float outdata = 0; /* 存放计算后的数字量 */
+    float inc = (2 * 3.1415962) / samples; /* 计算相邻两个点的x轴间隔 */
+
+    if (maxval <= (samples / 2))return; /* 数据不合法 */
+
+    for (i = 0; i < samples; i++) {
+        /*
+         * 正弦波函数解析式：y = Asin(ωx + φ）+ b
+         * 计算每个点的y值，将峰值放大maxval倍，并将曲线向上偏移maxval到正数区域
+         * 注意：DAC无法输出负电压，所以需要将曲线向上偏移一个峰值的量，让整个曲线都落在正数区域
+         */
+        outdata = maxval * sin(inc * i) + maxval;
+        if (outdata > 4095)
+            outdata = 4095; /* 上限限定 */
+        //printf("%f\r\n",outdata);
+        g_dac_sin_buf[i] = outdata;
     }
 }
 
-void dac_triangular_wave_by_key(void) {
+void dac_sin_wave_by_key(void) {
     uint8_t key = KEY_SCAN(0); /* 按键扫描 */
 
-    if (key == KEY0_PRES) /* 高采样率 , 100hz波形 ， 实际只有65.5hz */
+    if (key == KEY0_PRES) /* 高采样率 */
     {
-        printf("DAC Wave1");
-        dac_triangular_wave(4095, 5, 2000, 100); /* 幅值4095, 采样点间隔5us, 2000个采样点, 100个波形 */
-        printf("DAC None");
-    } else if (key == KEY1_PRES) /* 低采样率 , 100hz波形 ， 实际99.5hz */
+        dac_creat_sin_buf(2048, 100);
+        dac_dma_wave_enable(100, 10 - 1, 24 - 1); /* 300Khz触发频率, 100个点, 得到最高3KHz的正弦波. */
+    } else if (key == KEY1_PRES) /* 低采样率 */
     {
-        printf("DAC Wave2");
-        dac_triangular_wave(4095, 500, 20, 100); /* 幅值4095, 采样点间隔500us, 20个采样点, 100个波形 */
-        printf("DAC None");
+        dac_creat_sin_buf(2048, 10);
+        dac_dma_wave_enable(10, 10 - 1, 24 - 1); /* 300Khz触发频率, 10个点, 可以得到最高30KHz的正弦波. */
     }
 }

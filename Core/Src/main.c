@@ -95,17 +95,17 @@ int main(void)
   KEY_INIT();
   USART1_UART_Init(115200);
   adc_init();
-  dac_init();
+  dac_dma_wave_init();
   /* USER CODE BEGIN 2 */
-  printf("STM32 DAC Triangular WAVE TEST\r\n");
-  printf("KEY0:Wave1  KEY1:Wave2\r\n");
+  printf("STM32 DAC DMA Sin WAVE TEST\r\n");
+  printf("KEY0:3Khz  KEY1:30Khz\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    dac_triangular_wave_by_key();
+    dac_sin_wave_by_key();
     LED_TogglePin(GPIOB, GPIO_PIN_5);
     HAL_Delay(500);
     /* USER CODE END WHILE */
