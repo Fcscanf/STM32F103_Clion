@@ -42,6 +42,10 @@ add_executable(${CMAKE_PROJECT_NAME}
         Drivers/BSP/KEY/key.c
         Drivers/SYSTEM/USART/usart.h
         Drivers/SYSTEM/USART/usart.c
+        Drivers/BSP/24CXX/24cxx.h
+        Drivers/BSP/24CXX/24cxx.c
+        Drivers/BSP/IIC/iic.h
+        Drivers/BSP/IIC/iic.c
 )
 
 # Add STM32CubeMX generated sources

@@ -18,7 +18,9 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "../../SYSTEM/USART/usart.h"
+#include "../../BSP/KEY/key.h"
+#include "../../BSP/24CXX/24cxx.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -86,16 +88,18 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   LED_INIT();
+  KEY_INIT();
+  USART1_UART_Init(115200);
   /* USER CODE BEGIN 2 */
-
+  at24c02_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    at24c02_op_by_key();
     LED_TogglePin(GPIOB, GPIO_PIN_5);
-    LED_TogglePin(GPIOE, GPIO_PIN_5);
     HAL_Delay(500);
     /* USER CODE END WHILE */
 
