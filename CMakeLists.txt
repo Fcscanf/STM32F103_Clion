@@ -38,6 +38,8 @@ enable_language(C ASM)
 add_executable(${CMAKE_PROJECT_NAME}
         Drivers/BSP/LED/led.h
         Drivers/BSP/LED/led.c
+        Drivers/BSP/KEY/key.h
+        Drivers/BSP/KEY/key.c
         Drivers/SYSTEM/USART/usart.h
         Drivers/SYSTEM/USART/usart.c
 )
