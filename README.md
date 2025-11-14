@@ -9,3 +9,6 @@
 1. LED 灯
   - PB5引脚接LED0（对应板上灯DS0）
   - PE5引脚接LED1（对应板上灯DS1）
+2. 独立按键
+  - KEY0 – PE4
+  - KEY1 – PE3
