@@ -9,4 +9,7 @@
 1. LED 灯
   - PB5引脚接LED0（对应板上灯DS0）
   - PE5引脚接LED1（对应板上灯DS1）
-2. 串口 1(PA9/PA10 连接在板载 USB 转串口芯片 CH340 上面)(USMART 使用)
+2. 独立按键
+  - KEY0 – PE4
+  - KEY1 – PE3
+3. 串口 1(PA9/PA10 连接在板载 USB 转串口芯片 CH340 上面)(USMART 使用)
