@@ -21,7 +21,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
 
+#include "../../SYSTEM/USART/usart.h"
+#include "../../BSP/KEY/key.h"
+#include "../../BSP/NORFLASH/norflash.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -86,17 +90,38 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   LED_INIT();
+  USART1_UART_Init(115200);
+  KEY_INIT();
+  norflash_init();
   /* USER CODE BEGIN 2 */
-
+  uint16_t i = 0;
+  uint8_t rec_data = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    LED_TogglePin(GPIOB, GPIO_PIN_5);
-    LED_TogglePin(GPIOE, GPIO_PIN_5);
-    HAL_Delay(500);
+    uint8_t key = KEY_SCAN(0);
+
+    if (key == KEY1_PRES) /* KEY1按下,写入 */
+    {
+      norflash_write_page('A', 0x123457); /* 地址范围0~0xFFFFFF */
+      printf("write finish \r\n");
+    }
+
+    if (key == KEY0_PRES) /* KEY0按下,读取数据 */
+    {
+      rec_data = norflash_read_data(0x123457);
+      printf("read data : %c \r\n", rec_data);
+    }
+
+    i++;
+    if (i == 20) {
+      LED_TogglePin(GPIOB, GPIO_PIN_5); /* LED0闪烁 */
+      i = 0;
+    }
+    HAL_Delay(10);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
