@@ -19,6 +19,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
+#include <stdio.h>
+
+#include "../../BSP/KEY/key.h"
+#include "../../SYSTEM/USART/usart.h"
+#include "../../BSP/CAN/can.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -64,7 +69,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  uint8_t t = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -86,17 +91,24 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   LED_INIT();
+  KEY_INIT();
+  USART1_UART_Init(115200);
+  can_init(CAN_SJW_1TQ, CAN_BS2_8TQ, CAN_BS1_9TQ, 4, CAN_MODE_LOOPBACK); /* CAN初始化, 环回模式, 波特率500Kbps */
   /* USER CODE BEGIN 2 */
-
+  printf("STM32 CAN TEST\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    LED_TogglePin(GPIOB, GPIO_PIN_5);
-    LED_TogglePin(GPIOE, GPIO_PIN_5);
-    HAL_Delay(500);
+    can_test();
+    t++;
+    HAL_Delay(10);
+    if (t == 20) {
+      LED_TogglePin(GPIOB, GPIO_PIN_5); /* 提示系统正在运行 */
+      t = 0;
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
