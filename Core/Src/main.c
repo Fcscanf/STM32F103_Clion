@@ -93,7 +93,7 @@ int main(void)
   LED_INIT();
   KEY_INIT();
   USART1_UART_Init(115200);
-  can_init(CAN_SJW_1TQ, CAN_BS2_8TQ, CAN_BS1_9TQ, 4, CAN_MODE_LOOPBACK); /* CAN初始化, 环回模式, 波特率500Kbps */
+  can_init(); /* 初始化CAN */
   /* USER CODE BEGIN 2 */
   printf("STM32 CAN TEST\r\n");
   /* USER CODE END 2 */
