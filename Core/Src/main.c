@@ -95,7 +95,6 @@ int main(void)
   while (1)
   {
     LED_TogglePin(GPIOB, GPIO_PIN_5);
-    LED_TogglePin(GPIOE, GPIO_PIN_5);
     HAL_Delay(500);
     /* USER CODE END WHILE */
 
