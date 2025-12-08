@@ -51,11 +51,4 @@
                           HAL_GPIO_WritePin(T_CS_GPIO_PORT, T_CS_GPIO_PIN, GPIO_PIN_RESET); \
                       }while(0)     /* T_CS */
 
-
-/* 电阻屏函数 */
-/* MCU向XTP2046发送命令，XTP2046返回数据 */
-uint16_t tp_write_and_read_ad(uint8_t cmd_data);
-
-void tp_init(void); /* 初始化 */
-
 #endif //STM32F103_CLION_TOUCH_H

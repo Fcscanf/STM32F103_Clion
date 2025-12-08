@@ -44,6 +44,10 @@ add_executable(${CMAKE_PROJECT_NAME}
         Drivers/SYSTEM/USART/usart.c
         Drivers/SYSTEM/DELAY/delay.h
         Drivers/SYSTEM/DELAY/delay.c
+        Drivers/BSP/TOUCH/ctiic.h
+        Drivers/BSP/TOUCH/ctiic.c
+        Drivers/BSP/TOUCH/gt9xxx.h
+        Drivers/BSP/TOUCH/gt9xxx.c
         Drivers/BSP/TOUCH/touch.h
         Drivers/BSP/TOUCH/touch.c
 )

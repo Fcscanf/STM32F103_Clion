@@ -23,7 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include "../../SYSTEM/USART/usart.h"
-#include "../../BSP/TOUCH/touch.h"
+#include "../../BSP/TOUCH/gt9xxx.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -66,7 +66,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  uint16_t xval,yval;
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -90,16 +90,14 @@ int main(void)
   LED_INIT();
   USART1_UART_Init(115200);
   /* USER CODE BEGIN 2 */
-  tp_init();
+  gt9xxx_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    xval = tp_write_and_read_ad(0xD0);
-    yval = tp_write_and_read_ad(0x90);
-    printf("xval:%d yval:%d\r\n", xval, yval);
+    gt9xxx_scan();
     HAL_Delay(200);
     LED_TogglePin(GPIOB, GPIO_PIN_5);
     /* USER CODE END WHILE */

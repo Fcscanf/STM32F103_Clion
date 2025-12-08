@@ -5,62 +5,77 @@
 #include "touch.h"
 #include "../../SYSTEM/DELAY/delay.h"
 
-/* MCU向XTP2046发送命令，XTP2046返回数据 */
-uint16_t tp_write_and_read_ad(uint8_t cmd_data) {
-    uint16_t rd_data = 0;
+/**
+ * @brief       SPI写数据
+ *   @note      向触摸屏IC写入1 byte数据
+ * @param       data: 要写入的数据
+ * @retval      无
+ */
+static void tp_write_byte(uint8_t data) {
+    uint8_t count = 0;
 
-    /* 开始状态 */
-    T_CLK(0);
-    T_MOSI(0);
-    T_CS(0); /* 选中触摸IC */
-
-    /* MCU向XTP2046发送数据 */
-    for (uint8_t i = 0; i < 8; i++) {
-        T_CLK(0); /* MCU开始准备数据 */
-
-        if (cmd_data & 0x80) /* 数据要取最高位发送，MSB */
+    for (count = 0; count < 8; count++) {
+        if (data & 0x80) /* 发送1 */
         {
             T_MOSI(1);
-        } else {
+        } else /* 发送0 */
+        {
             T_MOSI(0);
         }
-        delay_us(1); /* MCU准备数据完成 */
 
-        T_CLK(1); /* MCU发送数据，XTP2046开始读取 */
-        delay_us(1); /* XTP2046读取数据完成 */
-
-        cmd_data <<= 1; /* 将次高位变为最高位，用于下次取最高位 */
+        data <<= 1;
+        T_CLK(0);
+        delay_us(1);
+        T_CLK(1); /* 上升沿有效 */
     }
+}
 
-    /* 过滤忙信号 */
+/**
+ * @brief       SPI读数据
+ *   @note      从触摸屏IC读取adc值
+ * @param       cmd: 指令
+ * @retval      读取到的数据,ADC值(12bit)
+ */
+static uint16_t tp_read_ad(uint8_t cmd) {
+    uint8_t count = 0;
+    uint16_t num = 0;
+
+    T_CLK(0); /* 先拉低时钟 */
+    T_MOSI(0); /* 拉低数据线 */
+
+    T_CS(0); /* 选中触摸屏IC */
+    tp_write_byte(cmd); /* 发送命令字 */
+    delay_us(6); /* ADS7846的转换时间最长为6us */
+
     T_CLK(0);
     delay_us(1);
-    T_CLK(1);
+    T_CLK(1); /* 给1个时钟，清除BUSY */
     delay_us(1);
+    T_CLK(0);
 
-    /* MCU读取XTP2046返回数据 */
-    for (uint8_t i = 0; i < 16; i++) {
-        T_CLK(0); /* XTP2046开始准备数据 */
+    for (count = 0; count < 16; count++) /* 读出16位数据,只有高12位有效 */
+    {
+        num <<= 1;
+        T_CLK(0); /* 下降沿有效 */
         delay_us(1);
-        T_CLK(1); /* MCU开始读取数据 */
+        T_CLK(1);
 
-        rd_data <<= 1; /* 空出最低位用来保存读取到的数据 */
-        rd_data |= T_MISO; /* MCU读取数据 */
-        delay_us(1);
+        if (T_MISO)num++;
     }
 
-    /* 结束状态 */
-    T_CLK(0); /* 完整的周期 */
-    T_CS(1); /* 取消选中触摸IC */
-
-    return (rd_data >>= 4);
+    num >>= 4; /* 只有高12位有效. */
+    T_CS(1); /* 释放片选 */
+    return num;
 }
 
 
 /**
  * @brief       触摸屏初始化
+ * @param       无
+ * @retval      0,没有进行校准
+ *              1,进行过校准
  */
-void tp_init(void) {
+uint8_t tp_init(void) {
     GPIO_InitTypeDef gpio_init_struct;
 
     T_PEN_GPIO_CLK_ENABLE(); /* T_PEN脚时钟使能 */
@@ -89,4 +104,6 @@ void tp_init(void) {
 
     gpio_init_struct.Pin = T_CS_GPIO_PIN;
     HAL_GPIO_Init(T_CS_GPIO_PORT, &gpio_init_struct); /* 初始化T_CS引脚 */
+
+    return 1;
 }
