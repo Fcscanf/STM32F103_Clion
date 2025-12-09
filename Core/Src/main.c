@@ -21,7 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "../../SYSTEM/USART/usart.h"
+#include "../../BSP/DHT11/dht11.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -86,17 +87,18 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   LED_INIT();
+  USART1_UART_Init(115200);
   /* USER CODE BEGIN 2 */
-
+  dht11_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    dht11_read_data();
+    HAL_Delay(2000);
     LED_TogglePin(GPIOB, GPIO_PIN_5);
-    LED_TogglePin(GPIOE, GPIO_PIN_5);
-    HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
