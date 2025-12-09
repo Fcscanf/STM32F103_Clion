@@ -23,7 +23,8 @@ HAL_GPIO_WritePin(DS18B20_DQ_GPIO_PORT, DS18B20_DQ_GPIO_PIN, GPIO_PIN_RESET); \
 }while(0)                                                       /* 数据端口输出 */
 #define DS18B20_DQ_IN       HAL_GPIO_ReadPin(DS18B20_DQ_GPIO_PORT, DS18B20_DQ_GPIO_PIN)     /* 数据端口输入 */
 
-void ds18b20_init(void);
-float ds18b20_get_temperature(void);
+uint8_t ds18b20_init(void);         /* 初始化DS18B20 */
+uint8_t ds18b20_check(void);        /* 检测是否存在DS18B20 */
+short ds18b20_get_temperature(void);/* 获取温度 */
 
 #endif //STM32F103_CLION_DS18B20_H

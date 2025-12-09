@@ -92,7 +92,19 @@ int main(void)
   USART1_UART_Init(115200);
   ds18b20_init();
   /* USER CODE BEGIN 2 */
+  printf("STM32 DS18B20 TEST");
+  while (ds18b20_init()) /* DS18B20初始化 */
+  {
+    // lcd_show_string(30, 110, 200, 16, 16, "DS18B20 Error", RED);
+    // delay_ms(200);
+    // lcd_fill(30, 110, 239, 130 + 16, WHITE);
+    // delay_ms(200);
+    printf("DS18B20 Error\r\n");
+  }
 
+  // lcd_show_string(30, 110, 200, 16, 16, "DS18B20 OK", RED);
+  // lcd_show_string(30, 130, 200, 16, 16, "Temp:   . C", BLUE);
+  printf("DS18B20 OK\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -101,7 +113,19 @@ int main(void)
   {
     if (t % 10 == 0) /* 每100ms读取一次 */
     {
-      printf("T:%.1f \r\n", ds18b20_get_temperature());
+      short temperature = ds18b20_get_temperature();
+
+      if (temperature < 0) {
+        // lcd_show_char(30 + 40, 130, '-', 16, 0, BLUE); /* 显示负号 */
+        temperature = -temperature; /* 转为正数 */
+        printf("-");
+      } else {
+        // lcd_show_char(30 + 40, 130, ' ', 16, 0, BLUE); /* 去掉负号 */
+      }
+
+      // lcd_show_num(30 + 40 + 8, 130, temperature / 10, 2, 16, BLUE); /* 显示正数部分 */
+      // lcd_show_num(30 + 40 + 32, 130, temperature % 10, 1, 16, BLUE); /* 显示小数部分 */
+      printf("%d.%d\r\n", temperature / 10, temperature % 10);
     }
     HAL_Delay(20);
     t++;
