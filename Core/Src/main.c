@@ -85,6 +85,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   GPIO_Init();
+  LED_INIT();
   GTIM_TIM5_CAP_CHY_INIT();
   /* USER CODE BEGIN 2 */
 
@@ -152,15 +153,10 @@ static void GPIO_Init(void)
 
   /* USER CODE END MX_GPIO_Init_1 */
 
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOE_CLK_ENABLE();
-
   /*Configure GPIO pin Output Level */
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
-  LED_INIT();
-  USART1_UART_Init(115200);
+
   /* USER CODE END MX_GPIO_Init_2 */
 }
 
