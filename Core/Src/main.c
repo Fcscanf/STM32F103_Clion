@@ -21,7 +21,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
 
+#include "../../SYSTEM/USART/usart.h"
+#include "../../BSP/DS18B20/ds18b20.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -64,7 +67,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  uint8_t t = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -86,6 +89,8 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   LED_INIT();
+  USART1_UART_Init(115200);
+  ds18b20_init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -94,9 +99,17 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    LED_TogglePin(GPIOB, GPIO_PIN_5);
-    LED_TogglePin(GPIOE, GPIO_PIN_5);
-    HAL_Delay(500);
+    if (t % 10 == 0) /* 每100ms读取一次 */
+    {
+      printf("T:%.1f \r\n", ds18b20_get_temperature());
+    }
+    HAL_Delay(20);
+    t++;
+
+    if (t == 20) {
+      t = 0;
+      LED_TogglePin(GPIOB, GPIO_PIN_5); /* LED0闪烁 */
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

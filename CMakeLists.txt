@@ -42,6 +42,8 @@ add_executable(${CMAKE_PROJECT_NAME}
         Drivers/SYSTEM/DELAY/delay.c
         Drivers/SYSTEM/USART/usart.h
         Drivers/SYSTEM/USART/usart.c
+        Drivers/BSP/DS18B20/ds18b20.h
+        Drivers/BSP/DS18B20/ds18b20.c
 )
 
 # Add STM32CubeMX generated sources
