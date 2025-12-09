@@ -21,7 +21,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
+#include "../../SYSTEM/USART/usart.h"
+#include "../../BSP/LED/led.h"
+#include "../../BSP/REMOTE/remote.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -64,7 +67,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  uint8_t t = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -86,19 +89,22 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   LED_INIT();
-  GTIM_TIM5_CAP_CHY_INIT();
+  USART1_UART_Init(115200);
+  remote_init(); /* 红外接收初始化 */
   /* USER CODE BEGIN 2 */
-
+  printf("STM32 Infrared Remote Control\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    // LED_TogglePin(GPIOB, GPIO_PIN_5);
-    // LED_TogglePin(GPIOE, GPIO_PIN_5);
-    CAP_IC();
-    HAL_Delay(10);
+    remote_test();
+    t++;
+    if (t == 20) {
+      t = 0;
+      LED_TogglePin(GPIOB, GPIO_PIN_5); /* LED0闪烁 */
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

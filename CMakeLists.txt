@@ -42,8 +42,8 @@ add_executable(${CMAKE_PROJECT_NAME}
         Drivers/BSP/KEY/key.c
         Drivers/SYSTEM/USART/usart.h
         Drivers/SYSTEM/USART/usart.c
-        Drivers/BSP/TIMER/gtim.h
-        Drivers/BSP/TIMER/gtim.c
+        Drivers/BSP/REMOTE/remote.h
+        Drivers/BSP/REMOTE/remote.c
 )
 
 # Add STM32CubeMX generated sources
