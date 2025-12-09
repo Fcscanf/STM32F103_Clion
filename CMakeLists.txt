@@ -39,7 +39,8 @@ add_executable(${CMAKE_PROJECT_NAME}
         Drivers/BSP/LED/led.h
         Drivers/BSP/LED/led.c
         Drivers/SYSTEM/DELAY/delay.h
-        Drivers/SYSTEM/DELAY/delay.c)
+        Drivers/SYSTEM/DELAY/delay.c
+)
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
