@@ -21,7 +21,11 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
 
+#include "../../SYSTEM/USART/usart.h"
+#include "../../BSP/KEY/key.h"
+#include "../../BSP/STMFLASH/stmflash.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -54,6 +58,16 @@ static void GPIO_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+/* 要写入到STM32 FLASH的字符串数组 */
+const uint8_t g_text_buf[] = {"STM32F103 FLASH TEST"};
+
+#define TEXT_LENTH sizeof(g_text_buf) /* 数组长度 */
+
+/* SIZE表示半字长(2字节), 大小必须是2的整数倍, 如果不是的话, 强制对齐到2的整数倍 */
+#define SIZE TEXT_LENTH / 2 + ((TEXT_LENTH % 2) ? 1 : 0)
+
+#define FLASH_SAVE_ADDR 0X08070000  /* 设置FLASH 保存地址(必须为偶数，且其值要大于本代码所占用FLASH的大小 + 0X08000000) */
+
 /* USER CODE END 0 */
 
 /**
@@ -64,7 +78,8 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  uint16_t i = 0;
+  uint8_t datatemp[SIZE];
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -86,16 +101,45 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   LED_INIT();
+  USART1_UART_Init(115200);
+  KEY_INIT();
   /* USER CODE BEGIN 2 */
-
+  printf("STM32 FLASH EEPROM TEST\r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    LED_TogglePin(GPIOB, GPIO_PIN_5);
-    HAL_Delay(500);
+    uint8_t key = KEY_SCAN(0);
+
+    if (key == KEY1_PRES) /* KEY1按下,写入STM32 FLASH */
+    {
+      // lcd_fill(0, 150, 239, 319, WHITE); /* 清除半屏 */
+      // lcd_show_string(30, 150, 200, 16, 16, "Start Write FLASH....", RED);
+      printf("Start Write FLASH....\r\n");
+      stmflash_write(FLASH_SAVE_ADDR, (uint16_t *) g_text_buf, SIZE);
+      // lcd_show_string(30, 150, 200, 16, 16, "FLASH Write Finished!", RED); /* 提示传送完成 */
+      printf("FLASH Write Finished!\r\n");
+    }
+
+    if (key == KEY0_PRES) /* KEY0按下,读取字符串并显示 */
+    {
+      // lcd_show_string(30, 150, 200, 16, 16, "Start Read FLASH.... ", RED);
+      printf("Start Read FLASH....\r\n");
+      stmflash_read(FLASH_SAVE_ADDR, (uint16_t *) datatemp, SIZE);
+      // lcd_show_string(30, 150, 200, 16, 16, "The Data Readed Is:  ", RED); /* 提示传送完成 */
+      // lcd_show_string(30, 170, 200, 16, 16, (char *) datatemp, BLUE); /* 显示读到的字符串 */
+      printf("The Data Readed Is: %s\r\n", (char *) datatemp);
+    }
+
+    i++;
+    HAL_Delay(10);
+
+    if (i == 20) {
+      LED_TogglePin(GPIOB, GPIO_PIN_5); /* 提示系统正在运行 */
+      i = 0;
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
