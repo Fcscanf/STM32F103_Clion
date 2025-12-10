@@ -40,6 +40,8 @@ add_executable(${CMAKE_PROJECT_NAME}
         Drivers/BSP/LED/led.c
         Drivers/BSP/KEY/key.h
         Drivers/BSP/KEY/key.c
+        Drivers/SYSTEM/DELAY/delay.h
+        Drivers/SYSTEM/DELAY/delay.c
         Drivers/SYSTEM/USART/usart.h
         Drivers/SYSTEM/USART/usart.c
         Drivers/BSP/SPI/spi.h
