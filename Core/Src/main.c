@@ -24,8 +24,9 @@
 #include <stdio.h>
 
 #include "../../SYSTEM/USART/usart.h"
+#include "../../SYSTEM/DELAY/delay.h"
 #include "../../BSP/KEY/key.h"
-#include "../../BSP/NORFLASH/norflash.h"
+#include "../../BSP/NRF24L01/nrf24l01.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -68,7 +69,9 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  uint8_t key, mode;
+  uint16_t t = 0;
+  uint8_t tmp_buf[33];
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -92,39 +95,120 @@ int main(void)
   LED_INIT();
   USART1_UART_Init(115200);
   KEY_INIT();
-  norflash_init();
+  nrf24l01_init(); /* 初始化NRF24L01 */
   /* USER CODE BEGIN 2 */
-  uint16_t i = 0;
-  uint8_t rec_data = 0;
+  printf("STM32 NRF24L01 TEST");
+  while (nrf24l01_check()) /* 检查NRF24L01是否在线 */
+  {
+    // lcd_show_string(30, 110, 200, 16, 16, "NRF24L01 Error", RED);
+    HAL_Delay(200);
+    // lcd_fill(30, 110, 239, 130 + 16, WHITE);
+    // HAL_Delay(200);
+    printf("NRF24L01 Error\r\n");
+  }
+  // lcd_show_string(30, 110, 200, 16, 16, "NRF24L01 OK", RED);
+  printf("NRF24L01 OK \r\n");
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    uint8_t key = KEY_SCAN(0);
+    key = KEY_SCAN(0);
 
-    if (key == KEY1_PRES) /* KEY1按下,写入 */
+    if (key == KEY0_PRES) {
+      mode = 0; /* 接收模式 */
+      break;
+    } else if (key == KEY1_PRES) {
+      mode = 1; /* 发送模式 */
+      break;
+    }
+
+    t++;
+
+    if (t == 100) /* 显示提示信息 */
     {
-      norflash_write_page('A', 0x123457); /* 地址范围0~0xFFFFFF */
-      printf("write finish \r\n");
+      // lcd_show_string(10, 130, 230, 16, 16, "KEY0:RX_Mode  KEY1:TX_Mode", RED);
+      printf("KEY0:RX_Mode  KEY1:TX_Mode\r\n");
     }
 
-    if (key == KEY0_PRES) /* KEY0按下,读取数据 */
+    if (t == 200) /* 关闭提示信息 */
     {
-      rec_data = norflash_read_data(0x123457);
-      printf("read data : %c \r\n", rec_data);
+      // lcd_fill(10, 130, 230, 150 + 16, WHITE);
+      t = 0;
     }
-
-    i++;
-    if (i == 20) {
-      LED_TogglePin(GPIOB, GPIO_PIN_5); /* LED0闪烁 */
-      i = 0;
-    }
-    HAL_Delay(10);
+    HAL_Delay(5);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+  }
+  // lcd_fill(10, 130, 240, 166, WHITE); /* 清空上面的显示 */
+
+  if (mode == 0) /* RX模式 */
+  {
+    // lcd_show_string(30, 130, 200, 16, 16, "NRF24L01 RX_Mode", BLUE);
+    // lcd_show_string(30, 150, 200, 16, 16, "Received DATA:", BLUE);
+    printf("NRF24L01 RX_Mode\r\n");
+
+    nrf24l01_rx_mode(); /* 进入RX模式 */
+
+    while (1) {
+      if (nrf24l01_rx_packet(tmp_buf) == 0) /* 一旦接收到信息,则显示出来. */
+      {
+        tmp_buf[32] = 0; /* 加入字符串结束符 */
+        // lcd_show_string(0, 170, lcddev.width - 1, 32, 16, (char *) tmp_buf, BLUE);
+        printf("Received DATA:%s\r\n", (char *) tmp_buf);
+      } else
+        delay_us(100);
+
+      t++;
+
+      if (t == 10000) /* 大约1s钟改变一次状态 */
+      {
+        t = 0;
+        LED_TogglePin(GPIOB, GPIO_PIN_5); /* LED0闪烁 */
+      }
+    }
+  } else /* TX模式 */
+  {
+    // lcd_show_string(30, 130, 200, 16, 16, "NRF24L01 TX_Mode", BLUE);
+    printf("NRF24L01 TX_Mode\r\n");
+    nrf24l01_tx_mode(); /* 进入TX模式 */
+    mode = ' '; /* 从空格键开始发送 */
+
+    while (1) {
+      /*  !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~ */
+      if (nrf24l01_tx_packet(tmp_buf) == 0) /* 发送成功 */
+      {
+        // lcd_show_string(30, 150, 239, 32, 16, "Sended DATA:", BLUE);
+        // lcd_show_string(0, 170, lcddev.width - 1, 32, 16, (char *) tmp_buf, BLUE);
+        printf("Sended DATA:%s\r\n", (char *) tmp_buf);
+        key = mode;
+
+        for (t = 0; t < 32; t++) {
+          key++;
+
+          if (key > ('~'))
+            key = ' ';
+
+          tmp_buf[t] = key;
+        }
+
+        mode++;
+
+        if (mode > '~')
+          mode = ' ';
+
+        tmp_buf[32] = 0; /* 加入结束符 */
+      } else {
+        // lcd_fill(0, 150, lcddev.width, 170 + 16 * 3, WHITE); /* 清空显示 */
+        // lcd_show_string(30, 150, lcddev.width - 1, 32, 16, "Send Failed ", BLUE);
+        printf("Send Failed\r\n");
+      }
+
+      LED_TogglePin(GPIOB, GPIO_PIN_5); /* LED0闪烁 */
+      HAL_Delay(200);
+    }
   }
   /* USER CODE END 3 */
 }
