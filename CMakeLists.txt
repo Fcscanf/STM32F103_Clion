@@ -44,6 +44,23 @@ add_executable(${CMAKE_PROJECT_NAME}
         Drivers/SYSTEM/USART/usart.c
         Drivers/SYSTEM/DELAY/delay.h
         Drivers/SYSTEM/DELAY/delay.c
+        Drivers/BSP/BEEP/beep.h
+        Drivers/BSP/BEEP/beep.c
+        Drivers/BSP/TPAD/tpad.h
+        Drivers/BSP/TPAD/tpad.c
+        Drivers/BSP/LCD/lcd.h
+        Drivers/BSP/LCD/lcd.c
+        #Drivers/BSP/LCD/lcd_ex.c
+        Drivers/BSP/LCD/lcdfont.h
+        Drivers/BSP/OV7725/sccb.h
+        Drivers/BSP/OV7725/sccb.c
+        Drivers/BSP/OV7725/ov7725.h
+        Drivers/BSP/OV7725/ov7725.c
+        Drivers/BSP/OV7725/ov7725cfg.h
+        Drivers/BSP/EXTI/exti.h
+        Drivers/BSP/EXTI/exti.c
+        Drivers/BSP/TIMER/btim.h
+        Drivers/BSP/TIMER/btim.c
 )
 
 # Add STM32CubeMX generated sources
