@@ -44,6 +44,22 @@ add_executable(${CMAKE_PROJECT_NAME}
         Drivers/SYSTEM/USART/usart.c
         Drivers/SYSTEM/DELAY/delay.h
         Drivers/SYSTEM/DELAY/delay.c
+        Drivers/BSP/LCD/lcd.c
+        Drivers/BSP/LCD/lcd.h
+        #Drivers/BSP/LCD/lcd_ex.c
+        Drivers/BSP/LCD/lcdfont.h
+        Drivers/BSP/IIC/myiic.c
+        Drivers/BSP/IIC/myiic.h
+        Drivers/BSP/24CXX/24cxx.c
+        Drivers/BSP/24CXX/24cxx.h
+        Drivers/BSP/TOUCH/ctiic.c
+        Drivers/BSP/TOUCH/ctiic.h
+        Drivers/BSP/TOUCH/touch.c
+        Drivers/BSP/TOUCH/touch.h
+        Drivers/BSP/TOUCH/gt9xxx.c
+        Drivers/BSP/TOUCH/gt9xxx.h
+        Drivers/BSP/TOUCH/ft5206.c
+        Drivers/BSP/TOUCH/ft5206.h
 )
 
 # Add STM32CubeMX generated sources
