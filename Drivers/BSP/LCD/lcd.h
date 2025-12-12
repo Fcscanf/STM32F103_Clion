@@ -2,6 +2,11 @@
 // Created by fcant on 2025/12/11 星期四.
 //
 
+/*
+ * 2.8寸/3.5寸/4.3寸/7寸 TFTLCD(MCU屏) 驱动代码
+ * 支持驱动IC型号包括:ILI9341/NT35310/NT35510/SSD1963/ST7789等
+ */
+
 #ifndef STM32F103_CLION_LCD_H
 #define STM32F103_CLION_LCD_H
 

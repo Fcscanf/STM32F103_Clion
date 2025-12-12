@@ -2,6 +2,8 @@
 // Created by fcant on 2025/12/11 星期四.
 //
 
+/* 包含12*12,16*16,24*24,32*32 四种LCD用ASCII字体 */
+
 #ifndef STM32F103_CLION_LCDFONT_H
 #define STM32F103_CLION_LCDFONT_H
 

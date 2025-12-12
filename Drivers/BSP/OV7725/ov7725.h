@@ -2,6 +2,8 @@
 // Created by fcant on 2025/12/11 星期四.
 //
 
+/* OV7725 驱动代码 */
+
 #ifndef STM32F103_CLION_OV7725_H
 #define STM32F103_CLION_OV7725_H
 
