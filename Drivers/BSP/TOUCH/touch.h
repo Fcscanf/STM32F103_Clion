@@ -2,6 +2,12 @@
 // Created by fcant on 2025/12/8 星期一.
 //
 
+/*
+ * 触摸屏 驱动代码
+ * 支持电阻/电容式触摸屏
+ * 触摸屏驱动（支持ADS7843/7846/UH7843/7846/XPT2046/TSC2046/GT9147/GT9271/FT5206等）代码
+ */
+
 #ifndef STM32F103_CLION_TOUCH_H
 #define STM32F103_CLION_TOUCH_H
 

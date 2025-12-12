@@ -2,6 +2,12 @@
 // Created by fcant on 2025/12/8 星期一.
 //
 
+/*
+ * 4.3寸电容触摸屏-GT9xxx 驱动代码
+ * GT系列电容触摸屏IC通用驱动,本代码支持: GT9147/GT917S/GT968/GT1151/GT9271 等多种
+ * 驱动IC, 这些驱动IC仅ID不一样, 具体代码基本不需要做任何修改即可通过本代码直接驱动
+ */
+
 #ifndef STM32F103_CLION_GT9XXX_H
 #define STM32F103_CLION_GT9XXX_H
 
