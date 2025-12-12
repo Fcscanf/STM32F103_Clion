@@ -3,10 +3,10 @@
 //
 
 #include "exti.h"
-#include "../../BSP/LED/led.h"
-#include "../../BSP/KEY/key.h"
-#include "../../BSP/BEEP/beep.h"
-#include "../../BSP/OV7725/ov7725.h"
+#include "../LED/led.h"
+#include "../KEY/key.h"
+#include "../BEEP/beep.h"
+#include "../OV7725/ov7725.h"
 
 /**
  * @brief       KEY0 外部中断服务程序
