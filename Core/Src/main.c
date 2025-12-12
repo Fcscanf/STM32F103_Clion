@@ -57,7 +57,10 @@ static void GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+/* 要写入到FLASH的字符串数组 */
+const uint8_t g_text_buf[] = {"STM32 SPI TEST"};
 
+#define TEXT_SIZE sizeof(g_text_buf) /* TEXT字符串长度 */
 /* USER CODE END 0 */
 
 /**
@@ -68,7 +71,10 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  uint16_t i = 0;
+  uint8_t datatemp[TEXT_SIZE];
+  uint32_t flashsize;
+  uint16_t id = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -94,8 +100,24 @@ int main(void)
   KEY_INIT();
   norflash_init();
   /* USER CODE BEGIN 2 */
-  uint16_t i = 0;
-  uint8_t rec_data = 0;
+  printf("STM32 SPI TEST\r\n");
+
+  id = norflash_read_id(); /* 读取FLASH ID */
+
+  while ((id == 0) || (id == 0XFFFF)) /* 检测不到FLASH芯片 */
+  {
+    // lcd_show_string(30, 130, 200, 16, 16, "FLASH Check Failed!", RED);
+    printf("FLASH Check Failed!\r\n");
+    HAL_Delay(500);
+    // lcd_show_string(30, 130, 200, 16, 16, "Please Check!      ", RED);
+    printf("Please Check!\r\n");
+    HAL_Delay(500);
+    LED_TogglePin(GPIOB, GPIO_PIN_5); /* LED0闪烁 */
+  }
+
+  // lcd_show_string(30, 130, 200, 16, 16, "SPI FLASH Ready!", BLUE);
+  printf("SPI FLASH Ready!\r\n");
+  flashsize = 16 * 1024 * 1024; /* FLASH 大小为16M字节 */
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -106,14 +128,23 @@ int main(void)
 
     if (key == KEY1_PRES) /* KEY1按下,写入 */
     {
-      norflash_write_page('A', 0x123457); /* 地址范围0~0xFFFFFF */
-      printf("write finish \r\n");
+      // lcd_fill(0, 150, 239, 319, WHITE); /* 清除半屏 */
+      // lcd_show_string(30, 150, 200, 16, 16, "Start Write FLASH....", BLUE);
+      printf("Start Write FLASH...\r\n");
+      sprintf((char *)datatemp, "%s %d", (char *)g_text_buf, i);
+      norflash_write((uint8_t *)datatemp, flashsize - 100, TEXT_SIZE);      /* 从倒数第100个地址处开始,写入SIZE长度的数据 */
+      // lcd_show_string(30, 150, 200, 16, 16, "FLASH Write Finished!", BLUE); /* 提示传送完成 */
+      printf("FLASH Write Finished!\r\n");
     }
 
-    if (key == KEY0_PRES) /* KEY0按下,读取数据 */
+    if (key == KEY0_PRES) /* KEY0按下,读取字符串并显示 */
     {
-      rec_data = norflash_read_data(0x123457);
-      printf("read data : %c \r\n", rec_data);
+      // lcd_show_string(30, 150, 200, 16, 16, "Start Read FLASH... . ", BLUE);
+      printf("Start Read FLASH...\r\n");
+      norflash_read(datatemp, flashsize - 100, TEXT_SIZE);                   /* 从倒数第100个地址处开始,读出SIZE个字节 */
+      // lcd_show_string(30, 150, 200, 16, 16, "The Data Readed Is:   ", BLUE); /* 提示传送完成 */
+      // lcd_show_string(30, 170, 200, 16, 16, (char *)datatemp, BLUE);         /* 显示读到的字符串 */
+      printf("The Data Readed Is: %s\r\n", (char *)datatemp);
     }
 
     i++;
