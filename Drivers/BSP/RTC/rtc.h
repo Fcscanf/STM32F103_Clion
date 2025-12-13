@@ -1,28 +1,28 @@
 //
-// Created by fcant on 2025/11/7 ĞÇÆÚÎå.
+// Created by fcant on 2025/11/7 æ˜ŸæœŸäº”.
 //
 
 #ifndef STM32F103_CLION_RTC_H
 #define STM32F103_CLION_RTC_H
 #include <stdint.h>
 
-/* Ê±¼ä½á¹¹Ìå, °üÀ¨ÄêÔÂÈÕÖÜÊ±·ÖÃëµÈĞÅÏ¢ */
+/* æ—¶é—´ç»“æ„ä½“, åŒ…æ‹¬å¹´æœˆæ—¥å‘¨æ—¶åˆ†ç§’ç­‰ä¿¡æ¯ */
 typedef struct
 {
-    uint8_t hour;       /* Ê± */
-    uint8_t min;        /* ·Ö */
-    uint8_t sec;        /* Ãë */
-    /* ¹«ÀúÄêÔÂÈÕÖÜ */
-    uint16_t year;      /* Äê */
-    uint8_t  month;     /* ÔÂ */
-    uint8_t  date;      /* ÈÕ */
-    uint8_t  week;      /* ÖÜ */
+    uint8_t hour;       /* æ—¶ */
+    uint8_t min;        /* åˆ† */
+    uint8_t sec;        /* ç§’ */
+    /* å…¬å†å¹´æœˆæ—¥å‘¨ */
+    uint16_t year;      /* å¹´ */
+    uint8_t  month;     /* æœˆ */
+    uint8_t  date;      /* æ—¥ */
+    uint8_t  week;      /* å‘¨ */
 } _calendar_obj;
 
-extern _calendar_obj calendar;                      /* Ê±¼ä½á¹¹Ìå */
+extern _calendar_obj calendar;                      /* æ—¶é—´ç»“æ„ä½“ */
 
 
-uint8_t rtc_init(void);                             /* ³õÊ¼»¯RTC */
+uint8_t rtc_init(void);                             /* åˆå§‹åŒ–RTC */
 
 uint8_t rtc_get_week(uint16_t year, uint8_t month, uint8_t day);
 uint8_t rtc_is_leap_year(uint16_t year);

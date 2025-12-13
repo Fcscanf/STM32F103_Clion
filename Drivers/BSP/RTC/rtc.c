@@ -1,35 +1,35 @@
 //
-// Created by fcant on 2025/11/7 ĞÇÆÚÎå.
+// Created by fcant on 2025/11/7 æ˜ŸæœŸäº”.
 //
 
 #include "rtc.h"
 #include "stm32f1xx_hal.h"
 
-RTC_HandleTypeDef g_rtc_handle = {0}; /* RTC¿ØÖÆ¾ä±ú */
-_calendar_obj calendar; /* Ê±¼ä½á¹¹Ìå */
+RTC_HandleTypeDef g_rtc_handle = {0}; /* RTCæ§åˆ¶å¥æŸ„ */
+_calendar_obj calendar; /* æ—¶é—´ç»“æ„ä½“ */
 
 /**
- * @brief       RTCĞ´Èëºó±¸ÇøÓòSRAM
- * @param       bkrx : ºó±¸Çø¼Ä´æÆ÷±àºÅ,·¶Î§:0~41
-                        ¶ÔÓ¦ RTC_BKP_DR1~RTC_BKP_DR42
- * @param       data : ÒªĞ´ÈëµÄÊı¾İ,16Î»³¤¶È
- * @retval      ÎŞ
+ * @brief       RTCå†™å…¥åå¤‡åŒºåŸŸSRAM
+ * @param       bkrx : åå¤‡åŒºå¯„å­˜å™¨ç¼–å·,èŒƒå›´:0~41
+                        å¯¹åº” RTC_BKP_DR1~RTC_BKP_DR42
+ * @param       data : è¦å†™å…¥çš„æ•°æ®,16ä½é•¿åº¦
+ * @retval      æ— 
  */
 void rtc_write_bkr(uint32_t bkrx, uint16_t data) {
-    HAL_PWR_EnableBkUpAccess(); /* È¡Ïû±¸·İÇøĞ´±£»¤ */
+    HAL_PWR_EnableBkUpAccess(); /* å–æ¶ˆå¤‡ä»½åŒºå†™ä¿æŠ¤ */
     HAL_RTCEx_BKUPWrite(&g_rtc_handle, bkrx + 1, data);
 }
 
 /**
- * @brief       RTC¶ÁÈ¡ºó±¸ÇøÓòSRAM
- * @param       bkrx : ºó±¸Çø¼Ä´æÆ÷±àºÅ,·¶Î§:0~41
-                ¶ÔÓ¦ RTC_BKP_DR1~RTC_BKP_DR42
- * @retval      ¶ÁÈ¡µ½µÄÖµ
+ * @brief       RTCè¯»å–åå¤‡åŒºåŸŸSRAM
+ * @param       bkrx : åå¤‡åŒºå¯„å­˜å™¨ç¼–å·,èŒƒå›´:0~41
+                å¯¹åº” RTC_BKP_DR1~RTC_BKP_DR42
+ * @retval      è¯»å–åˆ°çš„å€¼
  */
 uint16_t rtc_read_bkr(uint32_t bkrx) {
     uint32_t temp = 0;
     temp = HAL_RTCEx_BKUPRead(&g_rtc_handle, bkrx + 1);
-    return (uint16_t) temp; /* ·µ»Ø¶ÁÈ¡µ½µÄÖµ */
+    return (uint16_t) temp; /* è¿”å›è¯»å–åˆ°çš„å€¼ */
 }
 
 uint8_t rtc_set_time(uint16_t syear, uint8_t smon, uint8_t sday, uint8_t hour, uint8_t min, uint8_t sec) {
@@ -58,49 +58,49 @@ void rtc_get_time(void) {
     uint32_t seccount = 0;
     uint32_t temp = 0;
     uint16_t temp1 = 0;
-    const uint8_t month_table[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; /* Æ½ÄêµÄÔÂ·İÈÕÆÚ±í */
+    const uint8_t month_table[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; /* å¹³å¹´çš„æœˆä»½æ—¥æœŸè¡¨ */
 
     seccount = RTC->CNTH;
     seccount <<= 16;
     seccount += RTC->CNTL;
 
-    temp = seccount / 86400; /* µÃµ½ÌìÊı(ÃëÖÓÊı¶ÔÓ¦µÄ) */
+    temp = seccount / 86400; /* å¾—åˆ°å¤©æ•°(ç§’é’Ÿæ•°å¯¹åº”çš„) */
 
-    if (daycnt != temp) /* ³¬¹ıÒ»ÌìÁË */
+    if (daycnt != temp) /* è¶…è¿‡ä¸€å¤©äº† */
     {
         daycnt = temp;
-        temp1 = 1970; /* ´Ó1970Äê¿ªÊ¼ */
+        temp1 = 1970; /* ä»1970å¹´å¼€å§‹ */
 
         while (temp >= 365) {
-            if (rtc_is_leap_year(temp1)) /* ÊÇÈòÄê */
+            if (rtc_is_leap_year(temp1)) /* æ˜¯é—°å¹´ */
             {
                 if (temp >= 366) {
-                    temp -= 366; /* ÈòÄêµÄÃëÖÓÊı */
+                    temp -= 366; /* é—°å¹´çš„ç§’é’Ÿæ•° */
                 } else {
                     break;
                 }
             } else {
-                temp -= 365; /* Æ½Äê */
+                temp -= 365; /* å¹³å¹´ */
             }
 
             temp1++;
         }
 
-        calendar.year = temp1; /* µÃµ½Äê·İ */
+        calendar.year = temp1; /* å¾—åˆ°å¹´ä»½ */
         temp1 = 0;
 
-        while (temp >= 28) /* ³¬¹ıÁËÒ»¸öÔÂ */
+        while (temp >= 28) /* è¶…è¿‡äº†ä¸€ä¸ªæœˆ */
         {
-            if (rtc_is_leap_year(calendar.year) && temp1 == 1) /* µ±ÄêÊÇ²»ÊÇÈòÄê/2ÔÂ·İ */
+            if (rtc_is_leap_year(calendar.year) && temp1 == 1) /* å½“å¹´æ˜¯ä¸æ˜¯é—°å¹´/2æœˆä»½ */
             {
                 if (temp >= 29) {
-                    temp -= 29; /* ÈòÄêµÄÃëÖÓÊı */
+                    temp -= 29; /* é—°å¹´çš„ç§’é’Ÿæ•° */
                 } else {
                     break;
                 }
             } else {
                 if (temp >= month_table[temp1]) {
-                    temp -= month_table[temp1]; /* Æ½Äê */
+                    temp -= month_table[temp1]; /* å¹³å¹´ */
                 } else {
                     break;
                 }
@@ -109,15 +109,15 @@ void rtc_get_time(void) {
             temp1++;
         }
 
-        calendar.month = temp1 + 1; /* µÃµ½ÔÂ·İ */
-        calendar.date = temp + 1; /* µÃµ½ÈÕÆÚ */
+        calendar.month = temp1 + 1; /* å¾—åˆ°æœˆä»½ */
+        calendar.date = temp + 1; /* å¾—åˆ°æ—¥æœŸ */
     }
 
-    temp = seccount % 86400; /* µÃµ½ÃëÖÓÊı */
-    calendar.hour = temp / 3600; /* Ğ¡Ê± */
-    calendar.min = (temp % 3600) / 60; /* ·ÖÖÓ */
-    calendar.sec = (temp % 3600) % 60; /* ÃëÖÓ */
-    calendar.week = rtc_get_week(calendar.year, calendar.month, calendar.date); /* »ñÈ¡ĞÇÆÚ */
+    temp = seccount % 86400; /* å¾—åˆ°ç§’é’Ÿæ•° */
+    calendar.hour = temp / 3600; /* å°æ—¶ */
+    calendar.min = (temp % 3600) / 60; /* åˆ†é’Ÿ */
+    calendar.sec = (temp % 3600) % 60; /* ç§’é’Ÿ */
+    calendar.week = rtc_get_week(calendar.year, calendar.month, calendar.date); /* è·å–æ˜ŸæœŸ */
 }
 
 
@@ -158,22 +158,22 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef *hrtc) {
 }
 
 /**
- * @brief       ½«ÄêÔÂÈÕÊ±·ÖÃë×ª»»³ÉÃëÖÓÊı
- *   @note      ÒÔ1970Äê1ÔÂ1ÈÕÎª»ù×¼, 1970Äê1ÔÂ1ÈÕ, 0Ê±0·Ö0Ãë, ±íÊ¾µÚ0ÃëÖÓ
- *              ×î´ó±íÊ¾µ½2105Äê, ÒòÎªuint32_t×î´ó±íÊ¾136ÄêµÄÃëÖÓÊı(²»°üÀ¨ÈòÄê)!
- *              ±¾´úÂë²Î¿¼Ö»linux mktimeº¯Êı, Ô­ÀíËµÃ÷¼û´ËÌù:
+ * @brief       å°†å¹´æœˆæ—¥æ—¶åˆ†ç§’è½¬æ¢æˆç§’é’Ÿæ•°
+ *   @note      ä»¥1970å¹´1æœˆ1æ—¥ä¸ºåŸºå‡†, 1970å¹´1æœˆ1æ—¥, 0æ—¶0åˆ†0ç§’, è¡¨ç¤ºç¬¬0ç§’é’Ÿ
+ *              æœ€å¤§è¡¨ç¤ºåˆ°2105å¹´, å› ä¸ºuint32_tæœ€å¤§è¡¨ç¤º136å¹´çš„ç§’é’Ÿæ•°(ä¸åŒ…æ‹¬é—°å¹´)!
+ *              æœ¬ä»£ç å‚è€ƒåªlinux mktimeå‡½æ•°, åŸç†è¯´æ˜è§æ­¤è´´:
  *              http://www.openedv.com/thread-63389-1-1.html
- * @param       syear : Äê·İ
- * @param       smon  : ÔÂ·İ
- * @param       sday  : ÈÕÆÚ
- * @param       hour  : Ğ¡Ê±
- * @param       min   : ·ÖÖÓ
- * @param       sec   : ÃëÖÓ
- * @retval      ×ª»»ºóµÄÃëÖÓÊı
+ * @param       syear : å¹´ä»½
+ * @param       smon  : æœˆä»½
+ * @param       sday  : æ—¥æœŸ
+ * @param       hour  : å°æ—¶
+ * @param       min   : åˆ†é’Ÿ
+ * @param       sec   : ç§’é’Ÿ
+ * @retval      è½¬æ¢åçš„ç§’é’Ÿæ•°
  */
 long rtc_date2sec(uint16_t syear, uint8_t smon, uint8_t sday, uint8_t hour, uint8_t min, uint8_t sec) {
     uint32_t Y, M, D, X, T;
-    signed char monx = smon; /* ½«ÔÂ·İ×ª»»³É´ø·ûºÅµÄÖµ, ·½±ãºóÃæÔËËã */
+    signed char monx = smon; /* å°†æœˆä»½è½¬æ¢æˆå¸¦ç¬¦å·çš„å€¼, æ–¹ä¾¿åé¢è¿ç®— */
 
     if (0 >= (monx -= 2)) /* 1..12 -> 11,12,1..10 */
     {
@@ -181,25 +181,25 @@ long rtc_date2sec(uint16_t syear, uint8_t smon, uint8_t sday, uint8_t hour, uint
         syear -= 1;
     }
 
-    Y = (syear - 1) * 365 + syear / 4 - syear / 100 + syear / 400; /* ¹«ÔªÔªÄê1µ½ÏÖÔÚµÄÈòÄêÊı */
+    Y = (syear - 1) * 365 + syear / 4 - syear / 100 + syear / 400; /* å…¬å…ƒå…ƒå¹´1åˆ°ç°åœ¨çš„é—°å¹´æ•° */
     M = 367 * monx / 12 - 30 + 59;
     D = sday - 1;
-    X = Y + M + D - 719162; /* ¼õÈ¥¹«ÔªÔªÄêµ½1970ÄêµÄÌìÊı */
-    T = ((X * 24 + hour) * 60 + min) * 60 + sec; /* ×ÜÃëÖÓÊı */
+    X = Y + M + D - 719162; /* å‡å»å…¬å…ƒå…ƒå¹´åˆ°1970å¹´çš„å¤©æ•° */
+    T = ((X * 24 + hour) * 60 + min) * 60 + sec; /* æ€»ç§’é’Ÿæ•° */
     return T;
 }
 
 /**
- * @brief       ÅĞ¶ÏÄê·İÊÇ·ñÊÇÈòÄê
- *   @note      ÔÂ·İÌìÊı±í:
- *              ÔÂ·İ   1  2  3  4  5  6  7  8  9  10 11 12
- *              ÈòÄê   31 29 31 30 31 30 31 31 30 31 30 31
- *              ·ÇÈòÄê 31 28 31 30 31 30 31 31 30 31 30 31
- * @param       year : Äê·İ
- * @retval      0, ·ÇÈòÄê; 1, ÊÇÈòÄê;
+ * @brief       åˆ¤æ–­å¹´ä»½æ˜¯å¦æ˜¯é—°å¹´
+ *   @note      æœˆä»½å¤©æ•°è¡¨:
+ *              æœˆä»½   1  2  3  4  5  6  7  8  9  10 11 12
+ *              é—°å¹´   31 29 31 30 31 30 31 31 30 31 30 31
+ *              éé—°å¹´ 31 28 31 30 31 30 31 31 30 31 30 31
+ * @param       year : å¹´ä»½
+ * @retval      0, éé—°å¹´; 1, æ˜¯é—°å¹´;
  */
 uint8_t rtc_is_leap_year(uint16_t year) {
-    /* ÈòÄê¹æÔò: ËÄÄêÈò°ÙÄê²»Èò£¬ËÄ°ÙÄêÓÖÈò */
+    /* é—°å¹´è§„åˆ™: å››å¹´é—°ç™¾å¹´ä¸é—°ï¼Œå››ç™¾å¹´åˆé—° */
     if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
         return 1;
     } else {
@@ -208,14 +208,14 @@ uint8_t rtc_is_leap_year(uint16_t year) {
 }
 
 /**
- * @brief       ½«ÄêÔÂÈÕÊ±·ÖÃë×ª»»³ÉÃëÖÓÊı
- *   @note      ÊäÈë¹«ÀúÈÕÆÚµÃµ½ĞÇÆÚ(ÆğÊ¼Ê±¼äÎª: ¹«Ôª0Äê3ÔÂ1ÈÕ¿ªÊ¼, ÊäÈëÍùºóµÄÈÎºÎÈÕÆÚ, ¶¼¿ÉÒÔ»ñÈ¡ÕıÈ·µÄĞÇÆÚ)
- *              Ê¹ÓÃ »ùÄ·À­¶ûÉ­¼ÆËã¹«Ê½ ¼ÆËã, Ô­ÀíËµÃ÷¼û´ËÌù:
+ * @brief       å°†å¹´æœˆæ—¥æ—¶åˆ†ç§’è½¬æ¢æˆç§’é’Ÿæ•°
+ *   @note      è¾“å…¥å…¬å†æ—¥æœŸå¾—åˆ°æ˜ŸæœŸ(èµ·å§‹æ—¶é—´ä¸º: å…¬å…ƒ0å¹´3æœˆ1æ—¥å¼€å§‹, è¾“å…¥å¾€åçš„ä»»ä½•æ—¥æœŸ, éƒ½å¯ä»¥è·å–æ­£ç¡®çš„æ˜ŸæœŸ)
+ *              ä½¿ç”¨ åŸºå§†æ‹‰å°”æ£®è®¡ç®—å…¬å¼ è®¡ç®—, åŸç†è¯´æ˜è§æ­¤è´´:
  *              https://www.cnblogs.com/fengbohello/p/3264300.html
- * @param       syear : Äê·İ
- * @param       smon  : ÔÂ·İ
- * @param       sday  : ÈÕÆÚ
- * @retval      0, ĞÇÆÚÌì; 1 ~ 6: ĞÇÆÚÒ» ~ ĞÇÆÚÁù
+ * @param       syear : å¹´ä»½
+ * @param       smon  : æœˆä»½
+ * @param       sday  : æ—¥æœŸ
+ * @retval      0, æ˜ŸæœŸå¤©; 1 ~ 6: æ˜ŸæœŸä¸€ ~ æ˜ŸæœŸå…­
  */
 uint8_t rtc_get_week(uint16_t year, uint8_t month, uint8_t day) {
     uint8_t week = 0;
