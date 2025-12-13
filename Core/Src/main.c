@@ -21,7 +21,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "../../BSP/LED/led.h"
+#include "../../BSP/TIMER/atim.h"
+#include "../../Drivers/SYSTEM/USART/usart.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -64,7 +66,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  uint8_t t = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -85,6 +87,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   GPIO_Init();
+  LED_INIT();
+  USART1_UART_Init(115200);
   ATIM_TIM8_NPWM_INIT(1000 - 1, 72 - 1);
   ATIM_TIM8_SET_COMPARE();
   /* USER CODE BEGIN 2 */
@@ -95,10 +99,12 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    // LED_TogglePin(GPIOB, GPIO_PIN_5);
-    // LED_TogglePin(GPIOE, GPIO_PIN_5);
-    WORKING();
     HAL_Delay(10);
+    t++;
+    if (t > 20) {
+      t = 0;
+      LED_TogglePin(GPIOB, GPIO_PIN_5);
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -153,16 +159,10 @@ static void GPIO_Init(void)
 
   /* USER CODE END MX_GPIO_Init_1 */
 
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOE_CLK_ENABLE();
-
   /*Configure GPIO pin Output Level */
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
-  LED_INIT();
-  // KEY_INIT();
-  USART1_UART_Init(115200);
+
   /* USER CODE END MX_GPIO_Init_2 */
 }
 

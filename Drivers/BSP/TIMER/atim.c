@@ -73,18 +73,9 @@ void HAL_TIM_OC_MspInit(TIM_HandleTypeDef* htim_base)
     }
 }
 
-void ATIM_TIM8_SET_COMPARE() {
+void ATIM_TIM8_SET_COMPARE(void) {
     __HAL_TIM_SET_COMPARE(&htim8_comp_pwm_chy, TIM_CHANNEL_1, 250-1);
     __HAL_TIM_SET_COMPARE(&htim8_comp_pwm_chy, TIM_CHANNEL_2, 500-1);
     __HAL_TIM_SET_COMPARE(&htim8_comp_pwm_chy, TIM_CHANNEL_3, 750-1);
     __HAL_TIM_SET_COMPARE(&htim8_comp_pwm_chy, TIM_CHANNEL_4, 1000-1);
-}
-
-uint8_t t = 0;
-void WORKING(void) {
-    t++;
-    if (t > 20) {
-        t = 0;
-        LED_TogglePin(GPIOB, GPIO_PIN_5);
-    }
 }

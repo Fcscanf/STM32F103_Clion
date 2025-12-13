@@ -6,13 +6,8 @@
 #define STM32F103_CLION_BTIM_H
 
 #include "stm32f1xx_hal.h"
-#include "../LED/led.h"
-#include "../KEY/key.h"
 
 void ATIM_TIM8_NPWM_INIT(uint16_t arr, uint16_t psc);
-
-void ATIM_TIM8_SET_COMPARE();
-
-void WORKING(void);
+void ATIM_TIM8_SET_COMPARE(void);
 
 #endif //STM32F103_CLION_BTIM_H
