@@ -21,7 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "../../SYSTEM/USART/usart.h"
+#include "../../BSP/WDG/wdg.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -86,14 +87,14 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   USART1_UART_Init(115200);
-  IWDG_Init();
   /* USER CODE BEGIN 2 */
-
+  printf("您还没喂狗，请及时喂狗！！！\r\n");
+  IWDG_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  printf("您还没喂狗，请及时喂狗！！！\r\n");
+
   while (1)
   {
     /* USER CODE END WHILE */
@@ -155,7 +156,6 @@ static void GPIO_Init(void)
   /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
