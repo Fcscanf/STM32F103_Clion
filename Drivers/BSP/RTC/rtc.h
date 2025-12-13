@@ -4,7 +4,9 @@
 
 #ifndef STM32F103_CLION_RTC_H
 #define STM32F103_CLION_RTC_H
+
 #include <stdint.h>
+#include "stm32f1xx_hal.h"
 
 /* 时间结构体, 包括年月日周时分秒等信息 */
 typedef struct
@@ -21,14 +23,17 @@ typedef struct
 
 extern _calendar_obj calendar;                      /* 时间结构体 */
 
+/* 静态函数 */
+uint8_t rtc_is_leap_year(uint16_t year);     /* 判断当前年份是不是闰年 */
+long rtc_date2sec(uint16_t syear, uint8_t smon, uint8_t sday, uint8_t hour, uint8_t min, uint8_t sec);   /* 将年月日时分秒转换成秒钟数 */
 
+/* 接口函数 */
 uint8_t rtc_init(void);                             /* 初始化RTC */
-
-uint8_t rtc_get_week(uint16_t year, uint8_t month, uint8_t day);
-uint8_t rtc_is_leap_year(uint16_t year);
-long rtc_date2sec(uint16_t syear, uint8_t smon, uint8_t sday, uint8_t hour, uint8_t min, uint8_t sec);
-void rtc_get_time(void);
-uint8_t rtc_set_time(uint16_t syear, uint8_t smon, uint8_t sday, uint8_t hour, uint8_t min, uint8_t sec);
-
+void rtc_get_time(void);                            /* 获取RTC时间信息 */
+uint16_t rtc_read_bkr(uint32_t bkrx);               /* 读取后备寄存器 */
+void rtc_write_bkr(uint32_t bkrx, uint16_t data);   /* 写后备寄存器 */
+uint8_t rtc_get_week(uint16_t year, uint8_t month, uint8_t day);    /* 根据年月日获取星期几 */
+uint8_t rtc_set_time(uint16_t syear, uint8_t smon, uint8_t sday, uint8_t hour, uint8_t min, uint8_t sec);   /* 设置时间 */
+uint8_t rtc_set_alarm(uint16_t syear, uint8_t smon, uint8_t sday, uint8_t hour, uint8_t min, uint8_t sec);  /* 设置闹钟时间 */
 
 #endif //STM32F103_CLION_RTC_H

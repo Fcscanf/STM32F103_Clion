@@ -56,7 +56,9 @@ static void GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+/* 定义字符数组用于显示周 */
+char* weekdays[]={"Sunday","Monday","Tuesday","Wednesday",
+                  "Thursday","Friday","Saterday"};
 /* USER CODE END 0 */
 
 /**
@@ -67,7 +69,8 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  uint8_t tbuf[40];
+  uint8_t t = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -92,18 +95,34 @@ int main(void)
   USART1_UART_Init(115200);
   rtc_init();
   /* USER CODE BEGIN 2 */
-
+  rtc_set_alarm(2025, 12, 13, 14, 23, 45);  /* 设置一次闹钟 */
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    rtc_get_time();
-    printf("Date:%04d-%02d-%02d ", calendar.year, calendar.month, calendar.date);
-    printf("Time:%02d:%02d:%02d \r\n", calendar.hour, calendar.min, calendar.sec);
-    LED_TogglePin(GPIOB, GPIO_PIN_5);
-    HAL_Delay(500);
+    t++;
+    if ((t % 10) == 0) /* 每100ms更新一次显示数据 */
+    {
+      rtc_get_time();
+      sprintf((char *) tbuf, "Time:%02d:%02d:%02d", calendar.hour, calendar.min, calendar.sec);
+      // lcd_show_string(30, 120, 210, 16, 16, (char *) tbuf, RED);
+      printf("%s", (char *) tbuf);
+
+      sprintf((char *) tbuf, "Date:%04d-%02d-%02d", calendar.year, calendar.month, calendar.date);
+      // lcd_show_string(30, 140, 210, 16, 16, (char *) tbuf, RED);
+      printf("%s", (char *) tbuf);
+
+      sprintf((char *) tbuf, "Week:%s", weekdays[calendar.week]);
+      // lcd_show_string(30, 160, 210, 16, 16, (char *) tbuf, RED);
+      printf("%s", (char *) tbuf);
+    }
+
+    if ((t % 20) == 0) {
+      LED_TogglePin(GPIOB, GPIO_PIN_5); /* 每200ms,翻转一次LED0 */
+    }
+    HAL_Delay(10);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
