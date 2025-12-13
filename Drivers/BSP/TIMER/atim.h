@@ -10,9 +10,7 @@
 #include "../KEY/key.h"
 
 void ATIM_TIM8_PWMIN_CHY_INIT(void);
-
 void ATIM_TIM8_PWMIN_CHY_RESTART(void);
-
 void WORKING(void);
 
 #endif //STM32F103_CLION_ATIM_H

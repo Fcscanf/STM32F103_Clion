@@ -23,7 +23,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "../../BSP/LED/led.h"
+#include "../../BSP/TIMER/atim.h"
+#include "../../BSP/TIMER/gtim.h"
+#include "../../Drivers/SYSTEM/USART/usart.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -87,6 +90,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   GPIO_Init();
+  LED_INIT();
+  USART1_UART_Init(115200);
   GTIM_TIM3_PWM_CHY_INIT(10 - 1, 72 - 1);
   TIM3->CCR2 = 5;
   ATIM_TIM8_PWMIN_CHY_INIT();
@@ -156,16 +161,10 @@ static void GPIO_Init(void)
 
   /* USER CODE END MX_GPIO_Init_1 */
 
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOE_CLK_ENABLE();
-
   /*Configure GPIO pin Output Level */
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
-  LED_INIT();
-  // KEY_INIT();
-  USART1_UART_Init(115200);
+
   /* USER CODE END MX_GPIO_Init_2 */
 }
 

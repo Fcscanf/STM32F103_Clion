@@ -9,6 +9,9 @@ void LED_INIT(void){
 
     /*Configure GPIO pin Output Level */
 
+    /* GPIO Ports Clock Enable */
+    __HAL_RCC_GPIOE_CLK_ENABLE();
+
     /*Configure GPIO pin : GPIO_PIN_5 */
     GPIO_InitStruct.Pin = GPIO_PIN_5;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
