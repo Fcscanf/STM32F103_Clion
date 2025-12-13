@@ -21,7 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "../../BSP/LED/led.h"
+#include "../../BSP/BTIM/btim.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -85,6 +86,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   GPIO_Init();
+  LED_INIT();
   TIM6_Init();
   /* USER CODE BEGIN 2 */
 
@@ -151,14 +153,10 @@ static void GPIO_Init(void)
 
   /* USER CODE END MX_GPIO_Init_1 */
 
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOE_CLK_ENABLE();
-
   /*Configure GPIO pin Output Level */
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
-  LED_INIT();
+
   /* USER CODE END MX_GPIO_Init_2 */
 }
 
