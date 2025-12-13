@@ -28,9 +28,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal.h"
-#include "../../BSP/LED/led.h"
-#include "../../BSP/TIMER/gtim.h"
-#include "../../Drivers/SYSTEM/USART/usart.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
