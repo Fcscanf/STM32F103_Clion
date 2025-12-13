@@ -4,8 +4,6 @@
 
 #include "atim.h"
 
-#include <stdio.h>
-
 TIM_HandleTypeDef htim8_npwm_chy = {0};
 
 static uint8_t npwm_remain = 0;
@@ -28,8 +26,8 @@ void ATIM_TIM8_NPWM_INIT(uint16_t arr, uint16_t psc) {
     // 配置定时器的从模式
     TIM_OC_InitTypeDef TIM_OC_NPWM_CHY_InitStruct = {0};
     TIM_OC_NPWM_CHY_InitStruct.OCMode = TIM_OCMODE_PWM1; /* 模式选择 PMW 1*/
-    TIM_OC_NPWM_CHY_InitStruct.Pulse = arr/2; /* 设置比较值，此值用来 */
-                                              /* 这里默认设置比较值为 */
+    TIM_OC_NPWM_CHY_InitStruct.Pulse = arr/2; /* 设置比较值，此值用来确定占空比 */
+                                              /* 这里默认设置比较值为自动重装载值的一半,即占空比为50% */
     TIM_OC_NPWM_CHY_InitStruct.OCPolarity = TIM_OCPOLARITY_HIGH; /* 输出比较极性为高 */
     HAL_TIM_PWM_ConfigChannel(&htim8_npwm_chy, &TIM_OC_NPWM_CHY_InitStruct, TIM_CHANNEL_1);
 
@@ -50,8 +48,8 @@ void HAL_TIM_PWM_MspInit(TIM_HandleTypeDef* htim_base)
         __HAL_RCC_GPIOC_CLK_ENABLE(); /* 开启捕获IO的时钟 */
         __HAL_RCC_TIM8_CLK_ENABLE(); /* 使能TIM2时钟 */
         /*Configure GPIO pin : GPIO_PIN_6 */
+
         GPIO_InitStruct.Pin = GPIO_PIN_6;
-        /* 推挽复用 */
         GPIO_InitStruct.Mode = GPIO_MODE_AF_PP; /* 推挽式复用功能 */
         GPIO_InitStruct.Pull = GPIO_PULLUP; /* 上拉 */
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH; /* 高速 */
@@ -89,19 +87,5 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
             /* HAL库的关闭方式 */
             // __HAL_TIM_DISABLE(&htim8_npwm_chy);
         }
-    }
-}
-
-uint8_t key;
-uint8_t t = 0;
-void OUTPUT_NPWM(void) {
-    key = KEY_SCAN(0);
-    if (key == KEY0_PRES) {
-        ATIM_TIM8_NPWM_CHY_SET(6);
-    }
-    t++;
-    if (t > 20) {
-        t = 0;
-        LED_TogglePin(GPIOB, GPIO_PIN_5);
     }
 }
