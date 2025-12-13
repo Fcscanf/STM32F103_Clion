@@ -9,7 +9,7 @@
 TIM_HandleTypeDef htim5_ic_cap_chy;
 
 /**
-  * @brief 通用定时器PWM输出初始化函数
+  * @brief 通用定时器5输入捕获初始化函数
   * @param None
   * @retval None
   */
