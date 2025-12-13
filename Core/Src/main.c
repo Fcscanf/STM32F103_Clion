@@ -64,7 +64,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  uint8_t t = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -87,25 +87,29 @@ int main(void)
   GPIO_Init();
   LED_INIT();
   /* USER CODE BEGIN 2 */
-  oled_init();
-  oled_clear();
+  oled_init(); /* 初始化OLED */
 
-  // 描点实验
-  // oled_draw_point_test(0, 0);
-  // oled_draw_point_test(10, 0);
-  // oled_draw_point_test(10, 10);
-  // oled_draw_point_test(20, 20);
+  oled_show_string(0, 0, "ALIENTEK", 24);
+  oled_show_string(0, 24, "0.96' OLED TEST", 16);
+  oled_show_string(0, 52, "ASCII:", 12);
+  oled_show_string(64, 52, "CODE:", 12);
+  oled_refresh_gram(); /* 更新显示到OLED */
 
-  // 展示一个字符
-  oled_show_char_test(10, 10 ,1);
-
-  oled_refresh_gram();
+  t = ' ';
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    oled_show_char(36, 52, t, 12, 1); /* 显示ASCII字符 */
+    oled_show_num(94, 52, t, 3, 12); /* 显示ASCII字符的码值 */
+    oled_refresh_gram(); /* 更新显示到OLED */
+    t++;
+
+    if (t > '~') {
+      t = ' ';
+    }
     LED_TogglePin(GPIOB, GPIO_PIN_5);
     HAL_Delay(500);
     /* USER CODE END WHILE */
