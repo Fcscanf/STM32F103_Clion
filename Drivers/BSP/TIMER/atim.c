@@ -15,7 +15,7 @@ TIM_BreakDeadTimeConfigTypeDef sbreak_dead_time_config = {0};
   * @param None
   * @retval None
   */
-void ATIM_TIM1_CPLM_NPWM_INIT(uint16_t arr, uint16_t psc) {
+void ATIM_TIM1_CPLM_PWM_INIT(uint16_t arr, uint16_t psc) {
 
     htim1_cplm_pwm.Instance = TIM1;
     htim1_cplm_pwm.Init.Prescaler = psc; /* 定时器分频 */
@@ -88,17 +88,8 @@ void HAL_TIM_OC_MspInit(TIM_HandleTypeDef* htim_base)
 * @note tDTS = 1 / (Ft / CKD[1:0]) = 1 / 18M = 55.56ns
 * @retval 无
 */
-void ATIM_TIM1_CPLM_SET(uint16_t ccr, uint8_t dtg) {
+void ATIM_TIM1_CPLM_PWM_SET(uint16_t ccr, uint8_t dtg) {
     __HAL_TIM_SET_COMPARE(&htim1_cplm_pwm, TIM_CHANNEL_1, ccr);
     sbreak_dead_time_config.DeadTime = dtg;
     HAL_TIMEx_ConfigBreakDeadTime(&htim1_cplm_pwm, &sbreak_dead_time_config);
-}
-
-uint8_t t = 0;
-void WORKING(void) {
-    t++;
-    if (t > 20) {
-        t = 0;
-        LED_TogglePin(GPIOB, GPIO_PIN_5);
-    }
 }

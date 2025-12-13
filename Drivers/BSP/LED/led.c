@@ -7,6 +7,10 @@
 void LED_INIT(void){
     GPIO_InitTypeDef GPIO_InitStruct = {0};
 
+    /* GPIO Ports Clock Enable */
+    __HAL_RCC_GPIOB_CLK_ENABLE();
+    __HAL_RCC_GPIOE_CLK_ENABLE();
+
     /*Configure GPIO pin Output Level */
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(GPIOE, GPIO_PIN_5, GPIO_PIN_SET);
@@ -17,8 +21,6 @@ void LED_INIT(void){
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-    /* 通过杜邦线连接PC6与PE5，所以需要把PE5设置为输入，避免与PC6的输出冲突 */
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
     HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 }
 

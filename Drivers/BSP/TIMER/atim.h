@@ -9,10 +9,7 @@
 #include "../LED/led.h"
 #include "../KEY/key.h"
 
-void ATIM_TIM1_CPLM_NPWM_INIT(uint16_t arr, uint16_t psc);
-
-void ATIM_TIM1_CPLM_SET(uint16_t ccr, uint8_t dtg);
-
-void WORKING(void);
+void ATIM_TIM1_CPLM_PWM_INIT(uint16_t arr, uint16_t psc);
+void ATIM_TIM1_CPLM_PWM_SET(uint16_t ccr, uint8_t dtg);
 
 #endif //STM32F103_CLION_BTIM_H
