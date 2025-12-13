@@ -28,8 +28,8 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
-  #include "stm32f1xx_hal.h"
-#include "../../SYSTEM/USART/usart.h"
+#include "stm32f1xx_hal.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
