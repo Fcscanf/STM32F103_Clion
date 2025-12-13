@@ -6,7 +6,7 @@
 
 void EXTI_INIT(void){
     GPIO_InitTypeDef GPIO_InitStruct = {0};
-
+    __HAL_RCC_GPIOE_CLK_ENABLE();
     /*Configure GPIO pin Output Level */
 
     /*Configure GPIO pin : GPIO_PIN_5 */
