@@ -21,7 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "../../SYSTEM/USART/usart.h"
+#include "../../BSP/WDG/wdg.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -86,13 +87,8 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   USART1_UART_Init(115200);
-  WWDG_Init();
+
   /* USER CODE BEGIN 2 */
-
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
   if (__HAL_RCC_GET_FLAG(RCC_FLAG_WWDGRST) != RESET) {
     printf("窗口看门狗复位\r\n");
     __HAL_RCC_CLEAR_RESET_FLAGS();
@@ -100,6 +96,12 @@ int main(void)
     printf("外部复位\r\n");
   }
   printf("请在窗口期内喂狗\r\n");
+  WWDG_Init();
+  /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+
   while (1)
   {
     // 窗口期外喂狗会产生复位
@@ -162,7 +164,6 @@ static void GPIO_Init(void)
   /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 

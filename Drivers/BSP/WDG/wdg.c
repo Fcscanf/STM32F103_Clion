@@ -12,8 +12,7 @@ WWDG_HandleTypeDef hwwdg;
   * @param None
   * @retval None
   */
-void WWDG_Init(void){
-
+void WWDG_Init(void) {
     /* USER CODE BEGIN WWDG_Init 0 */
 
     /* USER CODE END WWDG_Init 0 */
@@ -26,13 +25,11 @@ void WWDG_Init(void){
     hwwdg.Init.Window = 0x5f;
     hwwdg.Init.Counter = 0x7f;
     hwwdg.Init.EWIMode = WWDG_EWI_ENABLE;
-    if (HAL_WWDG_Init(&hwwdg) != HAL_OK)
-    {
+    if (HAL_WWDG_Init(&hwwdg) != HAL_OK) {
     }
     /* USER CODE BEGIN WWDG_Init 2 */
 
     /* USER CODE END WWDG_Init 2 */
-
 }
 
 /**
@@ -42,10 +39,8 @@ void WWDG_Init(void){
   * @param hwwdg: WWDG handle pointer
   * @retval None
   */
-void HAL_WWDG_MspInit(WWDG_HandleTypeDef* hwwdg)
-{
-    if(hwwdg->Instance==WWDG)
-    {
+void HAL_WWDG_MspInit(WWDG_HandleTypeDef *hwwdg) {
+    if (hwwdg->Instance == WWDG) {
         /* USER CODE BEGIN WWDG_MspInit 0 */
 
         /* USER CODE END WWDG_MspInit 0 */
@@ -55,9 +50,7 @@ void HAL_WWDG_MspInit(WWDG_HandleTypeDef* hwwdg)
         HAL_NVIC_SetPriority(WWDG_IRQn, 2, 3);
         HAL_NVIC_EnableIRQ(WWDG_IRQn);
         /* USER CODE END WWDG_MspInit 1 */
-
     }
-
 }
 
 /* WWDG中断服务函数 */
