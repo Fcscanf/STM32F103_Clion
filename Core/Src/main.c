@@ -19,11 +19,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-#include <stdio.h>
-
-#include "../../BSP/LCD/lcd.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
+#include "../../BSP/LCD/lcd.h"
 
 /* USER CODE END Includes */
 
@@ -67,7 +66,8 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  uint16_t point_value = 0;
+  uint8_t x = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -91,8 +91,6 @@ int main(void)
   LED_INIT();
   lcd_init();
   /* USER CODE BEGIN 2 */
-  uint16_t point_value = 0;
-  uint8_t x = 0;
   lcd_draw_point(0, 0, RED);
   lcd_draw_point(0, 1, RED);
   lcd_draw_point(100, 100, RED);

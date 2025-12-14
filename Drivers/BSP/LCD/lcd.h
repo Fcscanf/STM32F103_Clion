@@ -5,6 +5,8 @@
 #ifndef STM32F103_CLION_LCD_H
 #define STM32F103_CLION_LCD_H
 
+#include "stm32f1xx_hal.h"
+
 /******************************************************************************************/
 /* LCD RST/WR/RD/BL/CS/RS 引脚 定义
  * LCD_D0~D15,由于引脚太多,就不在这里定义了,直接在lcd_init里面修改.所以在移植的时候,除了改

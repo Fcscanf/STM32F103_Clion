@@ -4,9 +4,8 @@
 
 #include "lcd.h"
 #include "lcdfont.h"
+#include "lcd_ex.c"
 #include <stdio.h>
-
-#include "stm32f1xx_hal.h"
 
 /* LCD的画笔颜色和背景色 */
 uint32_t g_point_color = 0XF800; /* 画笔颜色 */
