@@ -65,8 +65,8 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  uint16_t point_value = 0;
   uint8_t x = 0;
+  uint8_t lcd_id[12];
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -88,15 +88,15 @@ int main(void)
   /* Initialize all configured peripherals */
   GPIO_Init();
   LED_INIT();
-  lcd_init();
+  lcd_init(); /* 初始化LCD */
   /* USER CODE BEGIN 2 */
-  lcd_draw_point(0, 0, RED);
-  lcd_draw_point(0, 1, RED);
-  lcd_draw_point(100, 100, RED);
+  g_point_color = RED;
+  sprintf((char *) lcd_id, "LCD ID:%04X", lcddev.id); /* 将LCD ID打印到lcd_id数组 */
 
-  /* 0xF800 */
-  point_value = lcd_read_point(100, 100);
-  printf("point_value:%#x \r\n",point_value);
+  lcd_show_string(10, 40, 240, 32, 32, "STM32", RED);
+  lcd_show_string(10, 80, 240, 24, 24, "TFTLCD TEST", RED);
+  lcd_show_string(10, 110, 240, 16, 16, "ATOM@ALIENTEK", RED);
+  lcd_show_string(10, 130, 240, 16, 16, (char *)lcd_id, RED); /* 显示LCD ID */
 
   while(1)
   {
