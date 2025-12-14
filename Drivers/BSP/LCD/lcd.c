@@ -3,10 +3,8 @@
 //
 
 #include "lcd.h"
-#include "lcdfont.h"
+#include "lcd_ex.c"
 #include <stdio.h>
-
-#include "stm32f1xx_hal.h"
 
 SRAM_HandleTypeDef g_sram_handle = {0}; /* SRAM句柄(用于控制LCD) */
 

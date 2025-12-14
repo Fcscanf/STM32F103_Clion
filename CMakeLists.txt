@@ -40,7 +40,7 @@ add_executable(${CMAKE_PROJECT_NAME}
         Drivers/BSP/LED/led.c
         Drivers/BSP/LCD/lcd.h
         Drivers/BSP/LCD/lcd.c
-        Drivers/BSP/LCD/lcd_ex.c
+        #Drivers/BSP/LCD/lcd_ex.c
         Drivers/BSP/LCD/lcdfont.h)
 
 # Add STM32CubeMX generated sources

@@ -19,12 +19,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-#include <stdio.h>
-
-#include "../../BSP/LCD/lcd.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
+#include "../../BSP/LCD/lcd.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -67,7 +65,8 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+  uint16_t point_value = 0;
+  uint8_t x = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -95,8 +94,6 @@ int main(void)
   lcd_draw_point(0, 1, RED);
   lcd_draw_point(100, 100, RED);
 
-  uint16_t point_value = 0;
-  uint8_t x = 0;
   /* 0xF800 */
   point_value = lcd_read_point(100, 100);
   printf("point_value:%#x \r\n",point_value);
